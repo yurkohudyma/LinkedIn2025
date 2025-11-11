@@ -1,12 +1,18 @@
 package ua.hudyma.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.annotations.NaturalId;
 import ua.hudyma.util.IdGenerator;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -49,4 +55,23 @@ public class User {
             name = "user_positions",
             joinColumns = @JoinColumn(name = "user_id"))
     private List<Position> positionList = new ArrayList<>();
+    @ElementCollection
+    @CollectionTable(
+            name = "user_skills",
+            joinColumns = @JoinColumn(name = "user_id"))
+    private List<Skill> skillList = new ArrayList<>();
+    @OneToMany(mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Set<UserConnection> connections = new HashSet<>();
+
+    @OneToMany(mappedBy = "contact", cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Set<UserConnection> connectedWithMe = new HashSet<>();
+
+
 }

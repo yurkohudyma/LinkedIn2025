@@ -6,19 +6,27 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.hudyma.domain.User;
+import ua.hudyma.domain.UserConnection;
 import ua.hudyma.dto.*;
+import ua.hudyma.enums.ConnectionStatus;
 import ua.hudyma.exception.DtoObligatoryFieldsAreMissingException;
+import ua.hudyma.exception.EntityAlreadyExistsException;
 import ua.hudyma.mapper.*;
+import ua.hudyma.repository.UserConnectionRepository;
 import ua.hudyma.repository.UserRepository;
 
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+
+import static ua.hudyma.enums.ConnectionStatus.PENDING;
 
 @Service
 @RequiredArgsConstructor
 @Log4j2
 public class UserService {
+    private final UserConnectionRepository userConnectionRepository;
     private final UserRepository userRepository;
     private final UserEducationMapper educationMapper;
     private final UserPositionMapper positionMapper;
@@ -26,19 +34,32 @@ public class UserService {
     private final UserMessengerMapper messengerMapper;
     private final UserMapper userMapper;
     private final UserWebsiteMapper websiteMapper;
+    private final UserSkillMapper skillMapper;
 
     @Transactional
     public void addMessengers(String userCode, List<UserMessengerReqDto> dtoList) {
         avoidDtoNullity(dtoList);
         var user = getUser(userCode);
         var messengerList = messengerMapper.toEntityList(dtoList);
-        if (user.getMessengerList().isEmpty()){
+        if (user.getMessengerList().isEmpty()) {
             user.setMessengerList(messengerList);
-        }
-        else {
+        } else {
             user.getMessengerList().addAll(messengerList);
         }
         log.info("::: User {} " + user.getFullName() + " messagers List HAS BEEN UPDATED");
+    }
+
+    @Transactional
+    public void addSkills(String userCode, List<UserSkillReqDto> dtoList) {
+        avoidDtoNullity(dtoList);
+        var user = getUser(userCode);
+        var skillList = skillMapper.toEntityList(dtoList);
+        if (user.getSkillList().isEmpty()) {
+            user.setSkillList(skillList);
+        } else {
+            user.getSkillList().addAll(skillList);
+        }
+        log.info("::: User {} " + user.getFullName() + " skill List HAS BEEN UPDATED");
     }
 
     @Transactional
@@ -46,24 +67,22 @@ public class UserService {
         avoidDtoNullity(dtoList);
         var user = getUser(userCode);
         var websiteList = websiteMapper.toEntityList(dtoList);
-        if (user.getWebsiteList().isEmpty()){
+        if (user.getWebsiteList().isEmpty()) {
             user.setWebsiteList(websiteList);
-        }
-        else {
+        } else {
             user.getWebsiteList().addAll(websiteList);
         }
         log.info("::: User {} " + user.getFullName() + " websites List HAS BEEN UPDATED");
     }
-    
+
     @Transactional
     public void addPhones(String userCode, List<UserPhoneReqDto> dtoList) {
         avoidDtoNullity(dtoList);
         var user = getUser(userCode);
         var phoneList = phoneMapper.toEntityList(dtoList);
-        if (user.getPhoneList().isEmpty()){
+        if (user.getPhoneList().isEmpty()) {
             user.setPhoneList(phoneList);
-        }
-        else {
+        } else {
             user.getPhoneList().addAll(phoneList);
         }
         log.info("::: User {} " + user.getFullName() + " phonesList HAS BEEN UPDATED");
@@ -74,10 +93,9 @@ public class UserService {
         avoidDtoNullity(dtoList);
         var user = getUser(userCode);
         var positionList = positionMapper.toEntityList(dtoList);
-        if (user.getPositionList().isEmpty()){
+        if (user.getPositionList().isEmpty()) {
             user.setPositionList(positionList);
-        }
-        else {
+        } else {
             user.getPositionList().addAll(positionList);
         }
         log.info("::: User {} " + user.getFullName() + " positionList HAS BEEN UPDATED");
@@ -88,14 +106,53 @@ public class UserService {
         avoidDtoNullity(dtoList);
         User user = getUser(userCode);
         var educationList = educationMapper.toEntityList(dtoList);
-        if (user.getEducationList().isEmpty()){
+        if (user.getEducationList().isEmpty()) {
             user.setEducationList(educationList);
-        }
-        else {
+        } else {
             user.getEducationList().addAll(educationList);
         }
         log.info("::: User {} " + user.getFullName() + " educationList HAS BEEN UPDATED");
     }
+
+    @Transactional
+    public String createConnectionWithUser(UserConnectionReqDto dto) {
+        var initUser = getUser(dto.initUserCode());
+        var connectingUser = getUser(dto.connectingUserCode());
+        var existingConnectionOpt = userConnectionRepository
+                .findByUserAndContactOrContactAndUser(initUser, connectingUser, initUser, connectingUser);
+        if (existingConnectionOpt.isPresent()) {
+            var existingConnection = existingConnectionOpt.get();
+            if (existingConnection.getStatus() == ConnectionStatus.PENDING
+                    && existingConnection.getUser().equals(connectingUser)) {
+                existingConnection.setStatus(ConnectionStatus.ACCEPTED);
+                if (dto.connectingNote() != null && !dto.connectingNote().isBlank()) {
+                    existingConnection.setNote(dto.connectingNote());
+                }
+                userConnectionRepository.save(existingConnection);
+                String message = String.format("::: User %s accepted connection from %s",
+                        initUser.getFullName(), connectingUser.getFullName());
+                log.info(message);
+                return message;
+            }
+            var warning = String.format("Connection already exists between %s and %s",
+                    initUser.getFullName(), connectingUser.getFullName());
+            log.warn(warning);
+            throw new EntityAlreadyExistsException(warning);
+        }
+        var connection = new UserConnection();
+        connection.setUser(initUser);
+        connection.setContact(connectingUser);
+        connection.setStatus(PENDING);
+        Optional.ofNullable(dto.connectingNote())
+                .filter(s -> !s.isBlank())
+                .ifPresent(connection::setNote);
+        initUser.getConnections().add(connection); // <-- додаємо один раз
+        userRepository.save(initUser); // Hibernate збереже і connection
+        log.info("::: User {} requested connection with {}",
+                initUser.getFullName(), connectingUser.getFullName());
+        return "ok";
+    }
+
 
     @Transactional(readOnly = true)
     public UserRespDto fetchUser(String userCode) {
@@ -156,6 +213,6 @@ public class UserService {
         return userRepository
                 .findByUserCode(userCode).orElseThrow(
                         () -> new EntityNotFoundException
-                                (" User "+ userCode + " does NOT exist"));
+                                (" User " + userCode + " does NOT exist"));
     }
 }

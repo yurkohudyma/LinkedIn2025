@@ -51,4 +51,15 @@ public class UserController {
                               @RequestBody List<UserWebsiteReqDto> dtoList){
         userService.addWebsites(userCode, dtoList);
     }
+    @PatchMapping("/skills")
+    public void addSkills (@RequestParam String userCode,
+                             @RequestBody List<UserSkillReqDto> dtoList){
+        userService.addSkills(userCode, dtoList);
+    }
+
+    @PostMapping("/connect")
+    public ResponseEntity<String> connectWithUser (@RequestBody UserConnectionReqDto dto){
+        return ResponseEntity.ok(userService.createConnectionWithUser(dto));
+
+    }
 }

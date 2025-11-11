@@ -13,6 +13,6 @@ public record UserRespDto(
         List<UserEducationReqDto> educationList,
         List<UserMessengerReqDto> messengerList,
         List<UserWebsiteReqDto> websiteList,
-        List<UserPositionReqDto> positionList
-) {
+        List<UserPositionReqDto> positionList,
+        List<UserSkillReqDto> userSkillReqDtos) {
 }

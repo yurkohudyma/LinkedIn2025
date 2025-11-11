@@ -15,6 +15,7 @@ public class UserMapper extends BaseMapper <UserRespDto, User> {
     private final UserPhoneMapper phoneMapper;
     private final UserMessengerMapper messengerMapper;
     private final UserWebsiteMapper websiteMapper;
+    private final UserSkillMapper skillMapper;
     @Override
     protected UserRespDto toDto(User user) {
         return new UserRespDto(
@@ -28,7 +29,8 @@ public class UserMapper extends BaseMapper <UserRespDto, User> {
                 educationMapper.toDtoList(user.getEducationList()),
                 messengerMapper.toDtoList(user.getMessengerList()),
                 websiteMapper.toDtoList(user.getWebsiteList()),
-                positionMapper.toDtoList(user.getPositionList())
+                positionMapper.toDtoList(user.getPositionList()),
+                skillMapper.toDtoList(user.getSkillList())
         );
     }
 
