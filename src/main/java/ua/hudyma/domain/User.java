@@ -3,7 +3,6 @@ package ua.hudyma.domain;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.NaturalId;
-import ua.hudyma.enums.Messenger;
 import ua.hudyma.util.IdGenerator;
 
 import java.util.ArrayList;
@@ -34,7 +33,7 @@ public class User {
     @CollectionTable(
             name = "user_websites",
             joinColumns = @JoinColumn(name = "user_id"))
-    private List<Website> websiteUrlList = new ArrayList<>();
+    private List<Website> websiteList = new ArrayList<>();
     @ElementCollection
     @CollectionTable(
             name = "user_messengers",

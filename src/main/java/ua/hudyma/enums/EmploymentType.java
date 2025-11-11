@@ -1,4 +1,4 @@
-package ua.hudyma.domain;
+package ua.hudyma.enums;
 
 public enum EmploymentType {
     FULL_TIME,

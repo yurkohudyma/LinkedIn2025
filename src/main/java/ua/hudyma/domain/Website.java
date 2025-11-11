@@ -9,7 +9,7 @@ import ua.hudyma.enums.WebsiteType;
 @Embeddable
 @Data
 public class Website {
-    public String websiteUrl;
+    private String websiteUrl;
     @Enumerated(value = EnumType.STRING)
     private WebsiteType websiteType;
 }
