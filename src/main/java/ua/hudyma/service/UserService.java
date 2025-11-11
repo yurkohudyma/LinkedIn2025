@@ -8,11 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 import ua.hudyma.domain.User;
 import ua.hudyma.dto.*;
 import ua.hudyma.exception.DtoObligatoryFieldsAreMissingException;
-import ua.hudyma.mapper.UserReqMapper;
-import ua.hudyma.mapper.UserRespMapper;
+import ua.hudyma.mapper.*;
 import ua.hudyma.repository.UserRepository;
-import ua.hudyma.util.IdGenerator;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,14 +20,18 @@ import java.util.Objects;
 @Log4j2
 public class UserService {
     private final UserRepository userRepository;
-    private final UserReqMapper userReqMapper;
-    private final UserRespMapper userRespMapper;
+    private final UserEducationMapper educationMapper;
+    private final UserPositionMapper positionMapper;
+    private final UserPhoneMapper phoneMapper;
+    private final UserMessengerMapper messengerMapper;
+    private final UserMapper userMapper;
+    private final UserWebsiteMapper websiteMapper;
 
     @Transactional
     public void addMessengers(String userCode, List<UserMessengerReqDto> dtoList) {
         avoidDtoNullity(dtoList);
         var user = getUser(userCode);
-        var messengerList = userReqMapper.mapMessengerDtoListToEntityList(dtoList);
+        var messengerList = messengerMapper.toEntityList(dtoList);
         if (user.getMessengerList().isEmpty()){
             user.setMessengerList(messengerList);
         }
@@ -42,7 +45,7 @@ public class UserService {
     public void addWebsites(String userCode, List<UserWebsiteReqDto> dtoList) {
         avoidDtoNullity(dtoList);
         var user = getUser(userCode);
-        var websiteList = userReqMapper.mapWebsiteDtoListToEntityList(dtoList);
+        var websiteList = websiteMapper.toEntityList(dtoList);
         if (user.getWebsiteList().isEmpty()){
             user.setWebsiteList(websiteList);
         }
@@ -56,7 +59,7 @@ public class UserService {
     public void addPhones(String userCode, List<UserPhoneReqDto> dtoList) {
         avoidDtoNullity(dtoList);
         var user = getUser(userCode);
-        var phoneList = userReqMapper.mapPhoneDtoListToEntityList(dtoList);
+        var phoneList = phoneMapper.toEntityList(dtoList);
         if (user.getPhoneList().isEmpty()){
             user.setPhoneList(phoneList);
         }
@@ -70,7 +73,7 @@ public class UserService {
     public void addPositions(String userCode, List<UserPositionReqDto> dtoList) {
         avoidDtoNullity(dtoList);
         var user = getUser(userCode);
-        var positionList = userReqMapper.mapPositionDtoListToEntityList(dtoList);
+        var positionList = positionMapper.toEntityList(dtoList);
         if (user.getPositionList().isEmpty()){
             user.setPositionList(positionList);
         }
@@ -84,8 +87,7 @@ public class UserService {
     public void addEducation(String userCode, List<UserEducationReqDto> dtoList) {
         avoidDtoNullity(dtoList);
         User user = getUser(userCode);
-        //var educationList = userReqMapper.mapEducationDtoListToEntityList(dtoList);
-        var educationList = userReqMapper.mapEducationDtoListToEntityList(dtoList);
+        var educationList = educationMapper.toEntityList(dtoList);
         if (user.getEducationList().isEmpty()){
             user.setEducationList(educationList);
         }
@@ -98,37 +100,47 @@ public class UserService {
     @Transactional(readOnly = true)
     public UserRespDto fetchUser(String userCode) {
         var user = getUser(userCode);
-        return userRespMapper.toDto(user);
+        return userMapper.mapToDto(user);
     }
 
     public void createUser(UserReqDto dto) {
-        var user = new User();
         checkObligatoryFields(dto);
-        var name = dto.fullName();
-        String userCode = user.getUserCode();
-        if (userCode != null && !userCode.isEmpty()){
-            user.setProfileUrl(IdGenerator
-                    .generateLinkedProfileUrl(name, userCode));
-        }
-        user.setEmail(dto.email());
-        user.setFullName(name);
-        String address = dto.address();
-        if (address != null && !address.isEmpty()){
-            user.setAddress(address);
-        }
-        if (dto.dayOfBirth() != null){
-            user.setDayOfBirth(dto.dayOfBirth());
-        }
-        if (dto.monthOfBirth() != null){
-            user.setMonthOfBirth(dto.monthOfBirth());
-        }
+        var user = userMapper.mapToEntity(dto);
         userRepository.save(user);
-        log.info("::: User {} CREATED", name);
+        log.info("::: User {} CREATED", user.getFullName());
     }
 
-    private static <D> void avoidDtoNullity (D dtoList){
+    private static <D> void avoidDtoNullity(List<D> dtoList) {
         Objects.requireNonNull(dtoList, () -> "Required DtoList IS NULL");
+        if (dtoList.isEmpty()) {
+            throw new IllegalArgumentException("Dto List is Empty");
+        }
+        checkDtoFieldsIfNull(dtoList);
     }
+
+    private static <D> void checkDtoFieldsIfNull(List<D> dtoList) {
+        for (D dto : dtoList) {
+            if (dto == null) continue;
+            boolean allFieldsNull = true;
+            for (Field field : dto.getClass().getDeclaredFields()) {
+                field.setAccessible(true);
+                try {
+                    Object value = field.get(dto);
+                    if (value != null) {
+                        allFieldsNull = false;
+                        break;
+                    }
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            if (allFieldsNull) {
+                throw new IllegalArgumentException("DTO has all fields null: "
+                        + dto.getClass().getSimpleName());
+            }
+        }
+    }
+
 
     private static void checkObligatoryFields(UserReqDto dto) {
         if (dto == null ||
