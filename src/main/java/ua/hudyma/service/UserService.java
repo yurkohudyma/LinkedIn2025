@@ -113,8 +113,6 @@ public class UserService {
         log.info("::: User {} " + user.getFullName() + " educationList HAS BEEN UPDATED");
     }
 
-    //todo introduce messager
-
     @Transactional
     public String cancelConnection(UserConnectionReqDto dto) {
         checkObligatoryFields(dto);

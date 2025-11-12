@@ -3,6 +3,7 @@ package ua.hudyma.domain;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import ua.hudyma.enums.MessageStatus;
 
 import java.time.LocalDateTime;
@@ -24,6 +25,8 @@ public class Message {
     private User toUser;
     @CreationTimestamp
     private LocalDateTime sentOn;
+    @UpdateTimestamp
+    private LocalDateTime updatedOn;
     @Enumerated(value = EnumType.STRING)
     private MessageStatus status;
     @Column(columnDefinition = "text")

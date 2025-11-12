@@ -19,7 +19,10 @@ public class MessageMapper extends BaseMapper<MessageReqDto, Message> {
                             message.getMessageCode(),
                 message.getFromUser().getFullName(),
                 message.getToUser().getFullName(),
-                message.getText()
+                message.getText(),
+                message.getSentOn(),
+                message.getUpdatedOn(),
+                message.getStatus()
         );
     }
 

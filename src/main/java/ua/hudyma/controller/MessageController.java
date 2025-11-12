@@ -13,6 +13,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MessageController {
     private final MessageService messageService;
+    @GetMapping("/unsend")
+    public ResponseEntity<String> unsendMessage (@RequestParam String msgCode){
+        return ResponseEntity.ok(messageService.unsendMessage(msgCode));
+    }
 
     @PostMapping
     public ResponseEntity<String> createMessage (@RequestBody MessageReqDto dto){
