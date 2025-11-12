@@ -1,14 +1,15 @@
 package ua.hudyma.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.UpdateTimestamp;
 import ua.hudyma.util.IdGenerator;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -25,11 +26,16 @@ public class User {
     @Column(unique = true)
     private String userCode = IdGenerator.generateLinkedIdUserCode();
     private String email;
+    @Column(nullable = false)
     private String fullName;
     private String profileUrl;
     private String address;
     private Integer monthOfBirth;
     private Integer dayOfBirth;
+    @CreationTimestamp
+    private LocalDateTime createdOn;
+    @UpdateTimestamp
+    private LocalDateTime updatedOn;
     @ElementCollection
     @CollectionTable(
             name = "user_phones",
@@ -64,13 +70,13 @@ public class User {
             cascade = CascadeType.ALL,
             orphanRemoval = true)
     @ToString.Exclude
-    @EqualsAndHashCode.Exclude
+    //@EqualsAndHashCode.Exclude
     private Set<UserConnection> connections = new HashSet<>();
 
     @OneToMany(mappedBy = "contact", cascade = CascadeType.ALL,
             orphanRemoval = true)
     @ToString.Exclude
-    @EqualsAndHashCode.Exclude
+    //@EqualsAndHashCode.Exclude
     private Set<UserConnection> connectedWithMe = new HashSet<>();
 
 

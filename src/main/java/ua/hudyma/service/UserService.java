@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ua.hudyma.domain.User;
 import ua.hudyma.domain.UserConnection;
 import ua.hudyma.dto.*;
-import ua.hudyma.enums.ConnectionStatus;
 import ua.hudyma.exception.DtoObligatoryFieldsAreMissingException;
 import ua.hudyma.exception.EntityAlreadyExistsException;
 import ua.hudyma.mapper.*;
@@ -20,7 +19,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static ua.hudyma.enums.ConnectionStatus.PENDING;
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
+import static ua.hudyma.enums.ConnectionStatus.*;
 
 @Service
 @RequiredArgsConstructor
@@ -114,43 +115,98 @@ public class UserService {
         log.info("::: User {} " + user.getFullName() + " educationList HAS BEEN UPDATED");
     }
 
+    //todo introduce messager
+
+    @Transactional
+    public String cancelConnection(UserConnectionReqDto dto) {
+        checkObligatoryFields(dto);
+        var initUser = getUser(dto.initUserCode());
+        var connectingUser = getUser(dto.connectingUserCode());
+        var connectionOpt = userConnectionRepository
+                .findByUserAndContactOrContactAndUser(initUser, connectingUser, initUser, connectingUser);
+        var initUserFullName = initUser.getFullName();
+        var connectingUserFullName = connectingUser.getFullName();
+        if (connectionOpt.isEmpty()) {
+            throw new EntityAlreadyExistsException("Connection " + initUserFullName + " <-> " + connectingUserFullName + " NOT EXISTENT");
+        }
+        var connection = connectionOpt.get();
+        if (connection.getStatus() == REJECTED) {
+            String rejectedByName = connection.getRejectedBy() == null
+                    ? "UNKNOWN"
+                    : Objects.toString(connection.getRejectedBy().getFullName(), "UNKNOWN");
+
+            throw new EntityAlreadyExistsException(
+                    "Connection " + initUserFullName + " <-> " + connectingUserFullName +
+                            " EXISTS and rejected by " + rejectedByName
+            );
+
+        } else {
+            connection.setStatus(REJECTED);
+            connection.setRejectedBy(initUser);
+            log.info("::: Connection {} <-> {} HAS been Rejected", initUserFullName, connectingUserFullName);
+        }
+        return "ok";
+    }
+
     @Transactional
     public String createConnectionWithUser(UserConnectionReqDto dto) {
+        checkObligatoryFields(dto);
         var initUser = getUser(dto.initUserCode());
         var connectingUser = getUser(dto.connectingUserCode());
         var existingConnectionOpt = userConnectionRepository
                 .findByUserAndContactOrContactAndUser(initUser, connectingUser, initUser, connectingUser);
+        var initUserFullName = initUser.getFullName();
+        var connectingUserFullName = connectingUser.getFullName();
         if (existingConnectionOpt.isPresent()) {
             var existingConnection = existingConnectionOpt.get();
-            if (existingConnection.getStatus() == ConnectionStatus.PENDING
-                    && existingConnection.getUser().equals(connectingUser)) {
-                existingConnection.setStatus(ConnectionStatus.ACCEPTED);
+            //conn EXISTS As PENDING
+            if (existingConnection.getStatus() == PENDING && existingConnection.getUser().equals(connectingUser)) {
+                existingConnection.setStatus(ACCEPTED);
                 if (dto.connectingNote() != null && !dto.connectingNote().isBlank()) {
                     existingConnection.setNote(dto.connectingNote());
                 }
                 userConnectionRepository.save(existingConnection);
                 String message = String.format("::: User %s accepted connection from %s",
-                        initUser.getFullName(), connectingUser.getFullName());
+                        initUserFullName, connectingUserFullName);
                 log.info(message);
                 return message;
+            } else if (existingConnection.getStatus() == REJECTED && connRejectedByInitUser(initUser, existingConnection) == 0) { //conn REJECTED BY CONTACTING USER
+                throw new EntityAlreadyExistsException("Connection " + initUserFullName + " <-> "
+                        + connectingUserFullName + " EXISTS and rejected by " + connectingUserFullName);
+            } else if (existingConnection.getStatus() == REJECTED && connRejectedByInitUser(initUser, existingConnection) == 1) { //conn REJECTED BY INIT USER, RECONNECT
+                existingConnection.setStatus(ACCEPTED);
+                existingConnection.setRejectedBy(null);
+                log.info(":::: Refused connection by initUser {} has been RECONNECTED", initUserFullName);
+            } else {
+                var warning = String.format("Connection already exists between %s and %s",
+                        initUserFullName, connectingUserFullName);
+                log.warn(warning);
+                throw new EntityAlreadyExistsException(warning);
             }
-            var warning = String.format("Connection already exists between %s and %s",
-                    initUser.getFullName(), connectingUser.getFullName());
-            log.warn(warning);
-            throw new EntityAlreadyExistsException(warning);
         }
-        var connection = new UserConnection();
-        connection.setUser(initUser);
-        connection.setContact(connectingUser);
-        connection.setStatus(PENDING);
-        Optional.ofNullable(dto.connectingNote())
-                .filter(s -> !s.isBlank())
-                .ifPresent(connection::setNote);
-        initUser.getConnections().add(connection); // <-- додаємо один раз
-        userRepository.save(initUser); // Hibernate збереже і connection
-        log.info("::: User {} requested connection with {}",
-                initUser.getFullName(), connectingUser.getFullName());
-        return "ok";
+        else {
+            var connection = new UserConnection();
+            connection.setUser(initUser);
+            connection.setContact(connectingUser);
+            connection.setStatus(PENDING);
+            Optional.ofNullable(dto.connectingNote())
+                    .filter(s -> !s.isBlank())
+                    .ifPresent(connection::setNote);
+            initUser.getConnections().add(connection);
+            userRepository.save(initUser);
+            log.info("::: User {} requested connection with {}",
+                    initUserFullName, connectingUserFullName);
+            return "created connection";
+        }
+        return String.format("Refused connection by initUser %s has been RECONNECTED", initUserFullName);
+    }
+
+    private static int connRejectedByInitUser(User initUser, UserConnection existingConnection) {
+        if (existingConnection.getRejectedBy() == null) {
+            log.error(":::: RejectedByField is NULL, discard");
+            return -1;
+        }
+        return existingConnection.getRejectedBy().equals(initUser) ? 1 : 0;
     }
 
 
@@ -198,12 +254,22 @@ public class UserService {
         }
     }
 
-
     private static void checkObligatoryFields(UserReqDto dto) {
         if (dto == null ||
                 dto.fullName() == null ||
                 dto.fullName().isEmpty() ||
                 dto.email() == null || dto.email().isEmpty()) {
+            throw new DtoObligatoryFieldsAreMissingException
+                    ("User Req Dto or Compulsory fields are null or Missing");
+        }
+    }
+
+    private static void checkObligatoryFields(UserConnectionReqDto dto) {
+        if (dto == null ||
+                dto.initUserCode() == null ||
+                dto.initUserCode().isEmpty() ||
+                dto.connectingUserCode() == null ||
+                dto.connectingUserCode().isEmpty()) {
             throw new DtoObligatoryFieldsAreMissingException
                     ("User Req Dto or Compulsory fields are null or Missing");
         }

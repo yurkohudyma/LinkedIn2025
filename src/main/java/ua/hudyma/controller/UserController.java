@@ -60,6 +60,10 @@ public class UserController {
     @PostMapping("/connect")
     public ResponseEntity<String> connectWithUser (@RequestBody UserConnectionReqDto dto){
         return ResponseEntity.ok(userService.createConnectionWithUser(dto));
+    }
 
+    @PostMapping("/disconnect")
+    public ResponseEntity<String> disconnectWithUser (@RequestBody UserConnectionReqDto dto){
+        return ResponseEntity.ok(userService.cancelConnection(dto));
     }
 }
