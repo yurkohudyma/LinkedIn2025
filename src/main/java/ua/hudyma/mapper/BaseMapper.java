@@ -16,6 +16,9 @@ public abstract class BaseMapper<D, E> {
     public D mapToDto (E e){
         return toDto(e);
     }
+    public E mapToEntity (D d){
+        return toEntity(d);
+    }
 
     protected abstract D toDto(E entity);
     protected abstract E toEntity(D dto);

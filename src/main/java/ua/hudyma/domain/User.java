@@ -2,7 +2,6 @@ package ua.hudyma.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.NaturalId;
@@ -78,6 +77,17 @@ public class User {
     @ToString.Exclude
     //@EqualsAndHashCode.Exclude
     private Set<UserConnection> connectedWithMe = new HashSet<>();
+
+    @OneToMany(mappedBy = "fromUser",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    @ToString.Exclude
+    private List<Message> outcomingMessageList = new ArrayList<>();
+    @OneToMany(mappedBy = "toUser",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    @ToString.Exclude
+    private List<Message> incomingMessageList = new ArrayList<>();
 
 
 }

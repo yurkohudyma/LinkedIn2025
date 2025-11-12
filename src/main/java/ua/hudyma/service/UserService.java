@@ -19,8 +19,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static java.lang.Boolean.FALSE;
-import static java.lang.Boolean.TRUE;
 import static ua.hudyma.enums.ConnectionStatus.*;
 
 @Service
