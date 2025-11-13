@@ -2,7 +2,7 @@ package ua.hudyma.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ua.hudyma.domain.User;
+import ua.hudyma.domain.profile.User;
 import ua.hudyma.dto.UserReqDto;
 import ua.hudyma.dto.UserRespDto;
 import ua.hudyma.util.IdGenerator;

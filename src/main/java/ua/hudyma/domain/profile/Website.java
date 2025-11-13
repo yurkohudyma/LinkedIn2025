@@ -1,15 +1,15 @@
-package ua.hudyma.domain;
+package ua.hudyma.domain.profile;
 
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Data;
-import ua.hudyma.enums.PhoneType;
+import ua.hudyma.enums.WebsiteType;
 
 @Embeddable
 @Data
-public class Phone {
-    private String phoneNumber;
+public class Website {
+    private String websiteUrl;
     @Enumerated(value = EnumType.STRING)
-    private PhoneType phoneType;
+    private WebsiteType websiteType;
 }

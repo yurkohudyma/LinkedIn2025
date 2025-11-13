@@ -1,35 +1,37 @@
-package ua.hudyma.domain;
+package ua.hudyma.domain.content;
 
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import ua.hudyma.enums.MessageStatus;
+import ua.hudyma.domain.profile.User;
+import ua.hudyma.enums.CommentStatus;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "messages")
+@Table(name = "comments")
 @Data
-public class Message {
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String messageCode = UUID.randomUUID().toString();
+    private String commentCode = UUID.randomUUID().toString();
     @ManyToOne
-    @JoinColumn(name = "from_user_id")
-    private User fromUser;
+    @JoinColumn(name = "post_id")
+    private Post post;
     @ManyToOne
-    @JoinColumn(name = "to_user_id")
-    private User toUser;
+    @JoinColumn(name = "commenting_user_id")
+    private User user;
     @CreationTimestamp
     private LocalDateTime sentOn;
     @UpdateTimestamp
     private LocalDateTime updatedOn;
     @Enumerated(value = EnumType.STRING)
-    private MessageStatus status;
+    private CommentStatus status;
     @Column(columnDefinition = "text")
     private String text;
 
+    //todo add Emotions
 }

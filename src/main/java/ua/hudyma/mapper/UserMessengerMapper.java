@@ -1,7 +1,7 @@
 package ua.hudyma.mapper;
 
 import org.springframework.stereotype.Component;
-import ua.hudyma.domain.Messenger;
+import ua.hudyma.domain.profile.Messenger;
 import ua.hudyma.dto.UserMessengerReqDto;
 
 @Component

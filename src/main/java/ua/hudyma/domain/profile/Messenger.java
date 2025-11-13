@@ -1,15 +1,15 @@
-package ua.hudyma.domain;
+package ua.hudyma.domain.profile;
 
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Data;
-import ua.hudyma.enums.WebsiteType;
+import ua.hudyma.enums.MessengerType;
 
 @Embeddable
 @Data
-public class Website {
-    private String websiteUrl;
+public class Messenger {
+    private String messengerUserName;
     @Enumerated(value = EnumType.STRING)
-    private WebsiteType websiteType;
+    private MessengerType messengerType;
 }

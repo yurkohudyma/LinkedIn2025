@@ -1,7 +1,7 @@
 package ua.hudyma.mapper;
 
 import org.springframework.stereotype.Component;
-import ua.hudyma.domain.Education;
+import ua.hudyma.domain.profile.Education;
 import ua.hudyma.dto.UserEducationReqDto;
 
 @Component

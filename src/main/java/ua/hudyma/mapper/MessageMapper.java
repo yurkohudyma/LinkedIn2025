@@ -3,8 +3,8 @@ package ua.hudyma.mapper;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ua.hudyma.domain.Message;
-import ua.hudyma.domain.User;
+import ua.hudyma.domain.content.Message;
+import ua.hudyma.domain.profile.User;
 import ua.hudyma.enums.MessageReqDto;
 import ua.hudyma.repository.UserRepository;
 

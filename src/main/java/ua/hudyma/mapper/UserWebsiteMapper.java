@@ -1,7 +1,7 @@
 package ua.hudyma.mapper;
 
 import org.springframework.stereotype.Component;
-import ua.hudyma.domain.Website;
+import ua.hudyma.domain.profile.Website;
 import ua.hudyma.dto.UserWebsiteReqDto;
 
 @Component

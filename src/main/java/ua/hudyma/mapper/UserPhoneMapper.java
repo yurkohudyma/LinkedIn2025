@@ -1,7 +1,7 @@
 package ua.hudyma.mapper;
 
 import org.springframework.stereotype.Component;
-import ua.hudyma.domain.Phone;
+import ua.hudyma.domain.profile.Phone;
 import ua.hudyma.dto.UserPhoneReqDto;
 
 @Component

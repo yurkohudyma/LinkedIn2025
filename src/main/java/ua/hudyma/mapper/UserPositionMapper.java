@@ -1,7 +1,7 @@
 package ua.hudyma.mapper;
 
 import org.springframework.stereotype.Component;
-import ua.hudyma.domain.Position;
+import ua.hudyma.domain.profile.Position;
 import ua.hudyma.dto.UserPositionReqDto;
 
 @Component

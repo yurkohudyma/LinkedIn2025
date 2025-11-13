@@ -1,8 +1,8 @@
 package ua.hudyma.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ua.hudyma.domain.User;
-import ua.hudyma.domain.UserConnection;
+import ua.hudyma.domain.profile.User;
+import ua.hudyma.domain.profile.UserConnection;
 
 import java.util.Optional;
 

@@ -1,11 +1,15 @@
-package ua.hudyma.domain;
+package ua.hudyma.domain.profile;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.UpdateTimestamp;
+import ua.hudyma.domain.content.Comment;
+import ua.hudyma.domain.content.Message;
+import ua.hudyma.domain.content.Post;
 import ua.hudyma.util.IdGenerator;
 
 import java.time.LocalDateTime;
@@ -69,15 +73,12 @@ public class User {
             cascade = CascadeType.ALL,
             orphanRemoval = true)
     @ToString.Exclude
-    //@EqualsAndHashCode.Exclude
     private Set<UserConnection> connections = new HashSet<>();
 
     @OneToMany(mappedBy = "contact", cascade = CascadeType.ALL,
             orphanRemoval = true)
     @ToString.Exclude
-    //@EqualsAndHashCode.Exclude
     private Set<UserConnection> connectedWithMe = new HashSet<>();
-
     @OneToMany(mappedBy = "fromUser",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
@@ -88,6 +89,14 @@ public class User {
             orphanRemoval = true)
     @ToString.Exclude
     private List<Message> incomingMessageList = new ArrayList<>();
+    @OneToMany(mappedBy = "user",
+    cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private List<Post> postList = new ArrayList<>();
+    @OneToMany(mappedBy = "user",
+            cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private List<Comment> commentList = new ArrayList<>();
 
 
 }

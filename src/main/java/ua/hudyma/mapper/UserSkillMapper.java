@@ -1,7 +1,7 @@
 package ua.hudyma.mapper;
 
 import org.springframework.stereotype.Component;
-import ua.hudyma.domain.Skill;
+import ua.hudyma.domain.profile.Skill;
 import ua.hudyma.dto.UserSkillReqDto;
 
 @Component

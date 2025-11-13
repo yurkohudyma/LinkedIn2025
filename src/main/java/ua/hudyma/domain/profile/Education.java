@@ -1,15 +1,16 @@
-package ua.hudyma.domain;
+package ua.hudyma.domain.profile;
 
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Data;
-import ua.hudyma.enums.MessengerType;
+import ua.hudyma.enums.DegreeType;
 
 @Embeddable
 @Data
-public class Messenger {
-    private String messengerUserName;
+public class Education {
+    private String institutionName;
+    private String address;
     @Enumerated(value = EnumType.STRING)
-    private MessengerType messengerType;
+    private DegreeType degreeType;
 }
