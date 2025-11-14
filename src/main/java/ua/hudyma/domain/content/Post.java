@@ -2,6 +2,7 @@ package ua.hudyma.domain.content;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import ua.hudyma.domain.profile.User;
@@ -35,4 +36,8 @@ public class Post {
     private PostStatus status;
     @Column(columnDefinition = "text")
     private String text;
+    @OneToMany(mappedBy = "post",
+            cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private List<Emotion> emotionList = new ArrayList<>();
 }

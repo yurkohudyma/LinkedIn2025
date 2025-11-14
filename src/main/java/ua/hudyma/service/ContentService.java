@@ -122,14 +122,14 @@ public class ContentService {
                 .findAllByUser_UserCode(userCode));
     }
 
-    private User getUser(String userCode) {
+    protected User getUser(String userCode) {
         return userRepository
                 .findByUserCode(userCode).orElseThrow(
                         () -> new EntityNotFoundException
                                 (" User " + userCode + " does NOT exist"));
     }
 
-    private Post getPost(String postCode) {
+    protected Post getPost(String postCode) {
         return postRepository.findByPostCode(postCode)
                 .orElseThrow( () -> new EntityNotFoundException("Post " + postCode + " NOT EXISTENT"));
     }
@@ -148,7 +148,7 @@ public class ContentService {
         }
     }
 
-    private Comment getComment(String commentCode) {
+    protected Comment getComment(String commentCode) {
         return commentRepository.findByCommentCode(commentCode).orElseThrow();
     }
 

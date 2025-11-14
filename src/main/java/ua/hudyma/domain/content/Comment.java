@@ -8,6 +8,8 @@ import ua.hudyma.domain.profile.User;
 import ua.hudyma.enums.CommentStatus;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -32,6 +34,8 @@ public class Comment {
     private CommentStatus status;
     @Column(columnDefinition = "text")
     private String text;
-
-    //todo add Emotions
+    @OneToMany(mappedBy = "comment",
+            orphanRemoval = true,
+            cascade = CascadeType.ALL)
+    private List<Emotion> emotionList = new ArrayList<>();
 }

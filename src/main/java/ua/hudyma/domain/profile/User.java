@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.UpdateTimestamp;
 import ua.hudyma.domain.content.Comment;
+import ua.hudyma.domain.content.Emotion;
 import ua.hudyma.domain.content.Message;
 import ua.hudyma.domain.content.Post;
 import ua.hudyma.util.IdGenerator;
@@ -18,7 +19,7 @@ import java.util.List;
 import java.util.Set;
 
 //todo add EMOTIONS to posts, comments
-//todo add vacations
+//todo  add vacations
 
 @Entity
 @Table(name = "users")
@@ -99,6 +100,10 @@ public class User {
             cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private List<Comment> commentList = new ArrayList<>();
+    @OneToMany(mappedBy = "user",
+            cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private List<Emotion> emotionList = new ArrayList<>();
 
 
 }
