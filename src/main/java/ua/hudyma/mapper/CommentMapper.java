@@ -15,10 +15,11 @@ public class CommentMapper extends BaseMapper <CommentRespDto, Comment> {
                 comment.getUser().getFullName(),
                 comment.getPost().getUser().getFullName(),
                 comment.getSentOn(),
-                wasEdited (comment),
+                comment.getUpdatedOn(),
                 comment.getText(),
-                comment.getStatus()
-        );
+                comment.getStatus(),
+                wasEdited (comment)
+                );
     }
 
     private boolean wasEdited(Comment comment) {

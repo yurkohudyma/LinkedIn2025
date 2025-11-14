@@ -35,4 +35,21 @@ public class ContentController {
     public ResponseEntity<List<PostRespDto>> fetchAllUserPosts (@RequestParam String userCode){
         return ResponseEntity.ok(contentService.getAllUserPosts (userCode));
     }
+
+    @PatchMapping("/editComment")
+    public ResponseEntity<CommentRespDto> editComment (@RequestBody CommentReqDto dto, @RequestParam String commentCode){
+        return ResponseEntity.ok(contentService.editComment(dto, commentCode));
+    }
+    @PatchMapping("/editPost")
+    public ResponseEntity<PostRespDto> editPost (@RequestBody PostReqDto dto, @RequestParam String postCode){
+        return ResponseEntity.ok(contentService.editPost(dto, postCode));
+    }
+    @DeleteMapping("/deletePost")
+    public ResponseEntity<String> deletePost (@RequestParam String postCode){
+        return ResponseEntity.ok(contentService.deletePost(postCode));
+    }
+    @DeleteMapping("/deleteComment")
+    public ResponseEntity<String> deleteComment (@RequestParam String commentCode){
+        return ResponseEntity.ok(contentService.deleteComment(commentCode));
+    }
 }

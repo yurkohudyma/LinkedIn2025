@@ -1,5 +1,6 @@
 package ua.hudyma.service;
 
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -32,6 +33,7 @@ public class ContentService {
     private final UserRepository userRepository;
     private final CommentMapper commentMapper;
     private final PostMapper postMapper;
+    private final EntityManager em;
 
     @Transactional
     public String commentPost(CommentReqDto dto) {
@@ -68,6 +70,48 @@ public class ContentService {
         return msg;
     }
 
+    @Transactional
+    public String deleteComment(String commentCode) {
+        var comment = getComment(commentCode);
+        comment.setStatus(CommentStatus.DELETED);
+        var msg = String.format("Comment %s has BEEN DELETED", commentCode);
+        log.info(msg);
+        return msg;
+    }
+
+    @Transactional
+    public String deletePost(String postCode) {
+        var post = getPost(postCode);
+        post.setStatus(PostStatus.DELETED);
+        var msg = String.format("Post %s has BEEN DELETED", postCode);
+        log.info(msg);
+        return msg;
+    }
+
+    @Transactional
+    public CommentRespDto editComment(CommentReqDto dto, String commentCode) {
+        checkTextChangesAvailability(dto.text());
+        var comment = getComment(commentCode);
+        comment.setText(dto.text());
+        comment.setStatus(CommentStatus.EDITED);
+        var msg = String.format("Comment %s has BEEN UPDATED", commentCode);
+        log.info(msg);
+        em.flush();
+        return commentMapper.mapToDto(comment);
+    }
+
+    @Transactional
+    public PostRespDto editPost(PostReqDto dto, String postCode) {
+        checkTextChangesAvailability(dto.text());
+        var post = getPost(postCode);
+        post.setStatus(PostStatus.EDITED);
+        post.setText(dto.text());
+        var msg = String.format("Post %s has BEEN UPDATED", postCode);
+        log.info(msg);
+        em.flush();
+        return postMapper.mapToDto(post);
+    }
+
     public List<CommentRespDto> getAllPostComments(String postCode) {
         return commentMapper.toDtoList(commentRepository
                 .findAllByPost_PostCode(postCode));
@@ -101,6 +145,16 @@ public class ContentService {
     private static void checkObligatoryFields(PostReqDto dto) {
         if (dto == null || dto.authorUserCode() == null || dto.authorUserCode().isEmpty()) {
             throw new DtoObligatoryFieldsAreMissingException("Post dto fields are EMPTY or NULL");
+        }
+    }
+
+    private Comment getComment(String commentCode) {
+        return commentRepository.findByCommentCode(commentCode).orElseThrow();
+    }
+
+    private static void checkTextChangesAvailability(String text) {
+        if (text == null || text.isEmpty()) {
+            throw new DtoObligatoryFieldsAreMissingException("no changes applied, new text is null or empty");
         }
     }
 }

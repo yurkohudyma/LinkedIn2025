@@ -9,9 +9,10 @@ public record CommentRespDto(
         String commentAuthor,
         String postAuthor,
         LocalDateTime publishedOn,
-        Boolean wasEdited,
+        LocalDateTime updatedOn,
         String text,
-        CommentStatus status
+        CommentStatus status,
+        boolean wasEdited
 
 ) {
 

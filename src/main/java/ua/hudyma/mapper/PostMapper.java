@@ -13,6 +13,7 @@ public class PostMapper extends BaseMapper<PostRespDto, Post> {
                 post.getPostCode(),
                 post.getUser().getFullName(),
                 post.getSentOn(),
+                post.getUpdatedOn(),
                 post.getStatus(),
                 wasEdited(post),
                 post.getText()
