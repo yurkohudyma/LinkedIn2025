@@ -9,13 +9,19 @@ import ua.hudyma.domain.content.Comment;
 import ua.hudyma.domain.content.Post;
 import ua.hudyma.domain.profile.User;
 import ua.hudyma.dto.CommentReqDto;
+import ua.hudyma.dto.CommentRespDto;
 import ua.hudyma.dto.PostReqDto;
+import ua.hudyma.dto.PostRespDto;
 import ua.hudyma.enums.CommentStatus;
 import ua.hudyma.enums.PostStatus;
 import ua.hudyma.exception.DtoObligatoryFieldsAreMissingException;
+import ua.hudyma.mapper.CommentMapper;
+import ua.hudyma.mapper.PostMapper;
 import ua.hudyma.repository.CommentRepository;
 import ua.hudyma.repository.PostRepository;
 import ua.hudyma.repository.UserRepository;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +30,8 @@ public class ContentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final CommentMapper commentMapper;
+    private final PostMapper postMapper;
 
     @Transactional
     public String commentPost(CommentReqDto dto) {
@@ -38,22 +46,36 @@ public class ContentService {
         commentRepository.save(comment);
         user.getCommentList().add(comment);
         post.getCommentList().add(comment);
-        var msg = String.format(":::: Comment for post of %s SUCC published", user.getFullName());
+        var msg = String.format(":::: Comment for post of %s #%s SUCC published",
+                user.getFullName(), comment.getCommentCode());
         log.info(msg);
         return msg;
     }
 
+    @Transactional
     public String createPost(PostReqDto dto) {
         checkObligatoryFields(dto);
         var post = new Post();
         post.setStatus(PostStatus.PUBLISHED);
         post.setText(dto.text());
         var user = getUser(dto.authorUserCode());
+        post.setUser(user);
         postRepository.save(post);
         user.getPostList().add(post);
-        var msg = String.format(":::: Post of %s SUCC published", user.getFullName());
+        var msg = String.format(":::: Post of %s SUCC #%s published",
+                user.getFullName(), post.getPostCode());
         log.info(msg);
         return msg;
+    }
+
+    public List<CommentRespDto> getAllPostComments(String postCode) {
+        return commentMapper.toDtoList(commentRepository
+                .findAllByPost_PostCode(postCode));
+    }
+
+    public List<PostRespDto> getAllUserPosts(String userCode) {
+        return postMapper.toDtoList(postRepository
+                .findAllByUser_UserCode(userCode));
     }
 
     private User getUser(String userCode) {
