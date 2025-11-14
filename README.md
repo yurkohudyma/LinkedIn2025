@@ -2,7 +2,8 @@
 
 <ul>
 <li>Proprietory LinkedIn Profile Structure</li>
-<li>Private user Messaging logic</li>
-<li></li>
-<li></li>
+<li>User skills and positions</li>
+<li>User Messaging logic</li>
+<li>Posts and comments</li>
+<li>Vacations matching for User</li>
 </ul>

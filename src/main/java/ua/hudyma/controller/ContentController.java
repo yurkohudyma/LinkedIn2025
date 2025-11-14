@@ -3,8 +3,6 @@ package ua.hudyma.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ua.hudyma.domain.content.Comment;
-import ua.hudyma.domain.content.Post;
 import ua.hudyma.dto.CommentReqDto;
 import ua.hudyma.dto.CommentRespDto;
 import ua.hudyma.dto.PostReqDto;

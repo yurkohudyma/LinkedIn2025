@@ -2,7 +2,6 @@ package ua.hudyma.domain.profile;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.NaturalId;
@@ -17,6 +16,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+//todo add EMOTIONS to posts, comments
+//todo add vacations
 
 @Entity
 @Table(name = "users")
