@@ -18,9 +18,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-//todo add EMOTIONS to posts, comments
-//todo  add vacations
-
 @Entity
 @Table(name = "users")
 @Data
@@ -77,7 +74,6 @@ public class User {
             orphanRemoval = true)
     @ToString.Exclude
     private Set<UserConnection> connections = new HashSet<>();
-
     @OneToMany(mappedBy = "contact", cascade = CascadeType.ALL,
             orphanRemoval = true)
     @ToString.Exclude

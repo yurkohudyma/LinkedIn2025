@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import ua.hudyma.domain.job.Company;
 import ua.hudyma.domain.profile.User;
 import ua.hudyma.enums.PostStatus;
 
@@ -28,6 +29,9 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Company company;
     @CreationTimestamp
     private LocalDateTime sentOn;
     @UpdateTimestamp

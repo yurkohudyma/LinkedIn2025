@@ -2,6 +2,7 @@ package ua.hudyma.domain.content;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import ua.hudyma.domain.job.Company;
 import ua.hudyma.domain.profile.User;
 import ua.hudyma.enums.EmotionType;
 import ua.hudyma.util.IdGenerator;
@@ -19,6 +20,9 @@ public class Emotion {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Company company;
     @ManyToOne
     @JoinColumn(name = "post_id")
     private Post post;

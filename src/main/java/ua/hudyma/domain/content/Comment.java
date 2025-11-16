@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import ua.hudyma.domain.job.Company;
 import ua.hudyma.domain.profile.User;
 import ua.hudyma.enums.CommentStatus;
 
@@ -26,6 +27,9 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "commenting_user_id")
     private User user;
+    @ManyToOne
+    @JoinColumn(name = "commenting_company_id")
+    private Company company;
     @CreationTimestamp
     private LocalDateTime sentOn;
     @UpdateTimestamp

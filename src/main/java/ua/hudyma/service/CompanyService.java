@@ -1,0 +1,33 @@
+package ua.hudyma.service;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Service;
+import ua.hudyma.domain.job.Company;
+import ua.hudyma.dto.CompanyReqDto;
+import ua.hudyma.dto.VacancyReqDto;
+import ua.hudyma.mapper.CompanyMapper;
+import ua.hudyma.repository.CompanyRepository;
+import ua.hudyma.repository.VacancyRepository;
+
+@Service
+@RequiredArgsConstructor
+@Log4j2
+public class CompanyService {
+    private final CompanyRepository companyRepository;
+    private final VacancyRepository vacancyRepository;
+    private final CompanyMapper companyMapper;
+
+    public String createCompany(CompanyReqDto dto) {
+        var company = companyMapper.mapReqDtoToEntity (dto);
+        companyRepository.save(company);
+        var msg = String.format("::: Company %s has been created", company.getCompanyName());
+        log.info(msg);
+        return msg;
+    }
+
+    public String createVacancy(VacancyReqDto dto) {
+        var msg = "";
+        return msg;
+    }
+}
