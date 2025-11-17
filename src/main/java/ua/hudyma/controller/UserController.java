@@ -16,7 +16,7 @@ public class UserController {
 
     @GetMapping
     private ResponseEntity<UserRespDto> fetchUser (@RequestParam String userCode){
-        return ResponseEntity.ok(userService.fetchUser (userCode));
+        return ResponseEntity.ok(userService.fetchUserDto(userCode));
     }
 
     @PostMapping

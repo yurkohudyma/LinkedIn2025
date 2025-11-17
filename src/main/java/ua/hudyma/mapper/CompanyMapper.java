@@ -1,5 +1,6 @@
 package ua.hudyma.mapper;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ua.hudyma.domain.job.Company;
 import ua.hudyma.dto.CompanyReqDto;
@@ -8,6 +9,7 @@ import ua.hudyma.enums.CompanyActivityType;
 import ua.hudyma.enums.CompanySpecialtyType;
 import ua.hudyma.enums.LabeledEnum;
 import ua.hudyma.exception.DtoObligatoryFieldsAreMissingException;
+import ua.hudyma.repository.CompanyRepository;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -15,7 +17,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class CompanyMapper extends BaseMapper<CompanyRespDto, Company> {
+    private final CompanyRepository companyRepository;
 
     public Company mapReqDtoToEntity(CompanyReqDto dto) {
         var company = new Company();
@@ -63,17 +67,13 @@ public class CompanyMapper extends BaseMapper<CompanyRespDto, Company> {
                 company.getVacancyList().size(),
                 company.getCommentList().size(),
                 company.getEmotionList().size(),
-                getTrackingUsersCount(),
-                getWorkingUserCount()
+                company.getTrackingUsersList().size(),
+                getWorkingUserCount(company.getCompanyName())
         );
     }
 
-    private int getWorkingUserCount() {
-        return 0;
-    }
-
-    private int getTrackingUsersCount() {
-        return 0;
+    private int getWorkingUserCount(String companyName) {
+        return companyRepository.findUsersNumberHavingJobConnectionWithCompany(companyName);
     }
 
     private <E extends LabeledEnum> List<String> getEnumValueList(

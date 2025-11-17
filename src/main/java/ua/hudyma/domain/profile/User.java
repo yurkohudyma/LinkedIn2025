@@ -10,6 +10,7 @@ import ua.hudyma.domain.content.Comment;
 import ua.hudyma.domain.content.Emotion;
 import ua.hudyma.domain.content.Message;
 import ua.hudyma.domain.content.Post;
+import ua.hudyma.domain.job.Company;
 import ua.hudyma.util.IdGenerator;
 
 import java.time.LocalDateTime;
@@ -100,6 +101,13 @@ public class User {
             cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private List<Emotion> emotionList = new ArrayList<>();
+
+    @ManyToMany
+    @ToString.Exclude
+    @JoinTable(name = "users_tracking_companies",
+            joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns =
+                          @JoinColumn(name = "company_id"))
+    private List<Company> trackableCompanyList = new ArrayList<>();
 
 
 }

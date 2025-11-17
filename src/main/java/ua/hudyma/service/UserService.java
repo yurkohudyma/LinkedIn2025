@@ -207,7 +207,7 @@ public class UserService {
 
 
     @Transactional(readOnly = true)
-    public UserRespDto fetchUser(String userCode) {
+    public UserRespDto fetchUserDto(String userCode) {
         var user = getUser(userCode);
         return userMapper.mapToDto(user);
     }
@@ -271,7 +271,7 @@ public class UserService {
         }
     }
 
-    private User getUser(String userCode) {
+    public User getUser(String userCode) {
         return userRepository
                 .findByUserCode(userCode).orElseThrow(
                         () -> new EntityNotFoundException

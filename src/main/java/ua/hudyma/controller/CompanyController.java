@@ -13,6 +13,7 @@ import ua.hudyma.service.CompanyService;
 @RequiredArgsConstructor
 public class CompanyController {
     private final CompanyService companyService;
+
     @PostMapping("/company")
     public ResponseEntity<String> createCompany (@RequestBody CompanyReqDto dto){
         return ResponseEntity.ok(companyService.createCompany(dto));
@@ -26,9 +27,14 @@ public class CompanyController {
     public ResponseEntity<CompanyRespDto> fetchCompany (@RequestParam String companyCode){
         return ResponseEntity.ok(companyService.fetchCompany(companyCode));
     }
-
     @GetMapping("/vacancy")
     public ResponseEntity<VacancyRespDto> fetchVacancy (@RequestParam String vacancyCode){
         return ResponseEntity.ok(companyService.fetchVacancy(vacancyCode));
+    }
+    @GetMapping("/addTrackingUser")
+    private ResponseEntity<String> addTrackingUser (@RequestParam String companyCode,
+                                                    @RequestParam String userCode){
+        return ResponseEntity.ok(companyService
+                .addTrackingUser(companyCode, userCode));
     }
 }

@@ -9,6 +9,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import ua.hudyma.domain.content.Comment;
 import ua.hudyma.domain.content.Emotion;
 import ua.hudyma.domain.content.Post;
+import ua.hudyma.domain.profile.User;
 import ua.hudyma.enums.CompanyActivityType;
 import ua.hudyma.enums.CompanySize;
 import ua.hudyma.enums.CompanySpecialtyType;
@@ -69,9 +70,13 @@ public class Company {
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private List<Vacancy> vacancyList = new ArrayList<>();
+    @ManyToMany(mappedBy = "trackableCompanyList")
+    @ToString.Exclude
+    private List<User> trackingUsersList = new ArrayList<>();
+
 
     //todo add connections
-    //todo vacancies
+
     //todo company Resp stats
 
 }

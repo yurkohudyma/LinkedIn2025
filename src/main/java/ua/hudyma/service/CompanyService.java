@@ -16,8 +16,6 @@ import ua.hudyma.mapper.VacancyMapper;
 import ua.hudyma.repository.CompanyRepository;
 import ua.hudyma.repository.VacancyRepository;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 @Log4j2
@@ -26,6 +24,19 @@ public class CompanyService {
     private final VacancyRepository vacancyRepository;
     private final CompanyMapper companyMapper;
     private final VacancyMapper vacancyMapper;
+    private final UserService userService;
+
+    @Transactional
+    public String addTrackingUser(String companyCode, String userCode) {
+        var company = getCompany(companyCode);
+        var user = userService.getUser(userCode);
+        user.getTrackableCompanyList().add(company);
+        company.getTrackingUsersList().add(user);
+        var msg = String.format("User %s now tracks Company %s",
+                user.getFullName(), company.getCompanyName());
+        log.info(msg);
+        return msg;
+    }
 
     public String createCompany(CompanyReqDto dto) {
         var company = companyMapper.mapReqDtoToEntity (dto);
