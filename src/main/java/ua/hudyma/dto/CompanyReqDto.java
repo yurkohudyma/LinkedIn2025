@@ -1,6 +1,5 @@
 package ua.hudyma.dto;
 
-import ua.hudyma.domain.job.Vacancy;
 import ua.hudyma.enums.CompanyActivityType;
 import ua.hudyma.enums.CompanySize;
 import ua.hudyma.enums.CompanySpecialtyType;
@@ -18,6 +17,5 @@ public record CompanyReqDto(
         LocalDateTime accountVerifiedOn,
         CompanySize companySize,
         Set<CompanyActivityType> companyActivityTypes,
-        LocalDate yearEstablished
-) {
+        LocalDate yearEstablished) {
 }

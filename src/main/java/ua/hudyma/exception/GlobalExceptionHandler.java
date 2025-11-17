@@ -1,5 +1,6 @@
 package ua.hudyma.exception;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,16 +12,16 @@ import static java.time.LocalDateTime.now;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    /*@ExceptionHandler(DeliveryTolerancesExcessException.class)
-    public ResponseEntity<ErrorResponse> DeliveryTolerancesExcessException(
-            DeliveryTolerancesExcessException ex) {
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ErrorResponse> EntityNotFoundException(
+            EntityNotFoundException ex) {
         var error = new ErrorResponse(
                 HttpStatus.BAD_REQUEST.value(),
                 ex.getMessage(),
                 now()
         );
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-    }*/
+    }
 
     @ExceptionHandler(DtoObligatoryFieldsAreMissingException.class)
     public ResponseEntity<ErrorResponse> DtoObligatoryFieldsAreMissingException(

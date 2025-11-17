@@ -1,10 +1,12 @@
 package ua.hudyma.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import ua.hudyma.domain.job.Company;
 import ua.hudyma.dto.CompanyReqDto;
+import ua.hudyma.dto.CompanyRespDto;
 import ua.hudyma.dto.VacancyReqDto;
 import ua.hudyma.mapper.CompanyMapper;
 import ua.hudyma.repository.CompanyRepository;
@@ -29,5 +31,17 @@ public class CompanyService {
     public String createVacancy(VacancyReqDto dto) {
         var msg = "";
         return msg;
+    }
+
+    public CompanyRespDto fetchCompany(String companyCode) {
+        var company = getCompany(companyCode);
+        return companyMapper.mapToDto(company);
+    }
+
+    private Company getCompany(String companyCode) {
+        return companyRepository.findByCompanyCode(companyCode)
+                .orElseThrow(
+                        () -> new EntityNotFoundException
+                                ("::: Company " + companyCode + " NOT EXISTENT"));
     }
 }

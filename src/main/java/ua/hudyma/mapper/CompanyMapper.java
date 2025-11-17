@@ -5,33 +5,90 @@ import org.springframework.stereotype.Component;
 import ua.hudyma.domain.job.Company;
 import ua.hudyma.dto.CompanyReqDto;
 import ua.hudyma.dto.CompanyRespDto;
+import ua.hudyma.enums.CompanyActivityType;
 import ua.hudyma.enums.CompanySpecialtyType;
+import ua.hudyma.enums.LabeledEnum;
+import ua.hudyma.exception.DtoObligatoryFieldsAreMissingException;
 
+import java.util.EnumSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class CompanyMapper extends BaseMapper<CompanyRespDto, Company> {
     public Company mapReqDtoToEntity(CompanyReqDto dto) {
-        //todo introduce dto fields checkup
         var company = new Company();
         company.setCompanyName(dto.companyName());
-        company.setCompanySpecialtyTypes(mapToEnumSet(dto.companySpecialtyTypes()));
+        company.setCompanySpecialtyTypes(
+                toEnumSet(dto.companySpecialtyTypes(),
+                        CompanySpecialtyType.class));
         company.setCompanyDescription(dto.companyDescription());
         company.setPhone(dto.phone());
         company.setAccountVerifiedOn(dto.accountVerifiedOn());
         company.setCompanySize(dto.companySize());
-        company.setCompanyActivityType(mapToEnumSet(dto.companyActivityTypes()));
+        company.setCompanyActivityType(
+                toEnumSet(dto.companyActivityTypes(),
+                        CompanyActivityType.class));
         company.setYearEstablished(dto.yearEstablished());
+        company.setWebsite(dto.website());
         return company;
     }
 
-    private <E, I> Set<E> mapToEnumSet(Set<I> companySpecialtyTypes) {
-        return null;
+    private <E extends Enum<E>> Set<E> toEnumSet(Set<E> dtoSet,
+                                                 Class<E> enumClass) {
+        if (dtoSet == null) throw new DtoObligatoryFieldsAreMissingException
+                ("Dto Set is NULL, cannot proceed");
+        return dtoSet.stream()
+                .collect(Collectors.toCollection(
+                        () -> EnumSet
+                                .noneOf(enumClass)));
     }
 
     @Override
     protected CompanyRespDto toDto(Company company) {
-        return null;
+        return new CompanyRespDto(
+                company.getCompanyCode(),
+                company.getCompanyName(),
+                getEnumValueList(company
+                        .getCompanySpecialtyTypes()),
+                company.getCompanyDescription(),
+                company.getWebsite(),
+                company.getPhone(),
+                company.getAccountVerifiedOn(),
+                company.getCompanySize().getLabel(),
+                getEnumValueList(company
+                        .getCompanyActivityType()),
+                company.getYearEstablished().getYear(),
+                getVacanciesCount(),
+                getCommentsCount(),
+                getEmotionsCount(),
+                getTrackingUsersCount()
+        );
+    }
+
+    private int getTrackingUsersCount() {
+        return 0;
+    }
+
+    private int getEmotionsCount() {
+        return 0;
+    }
+
+    private int getCommentsCount() {
+        return 0;
+    }
+
+    private int getVacanciesCount() {
+        return 0;
+    }
+
+    private <E extends LabeledEnum> List<String> getEnumValueList(
+            Set<E> types) {
+        return types
+                .stream()
+                .map(E::getLabel)
+                .toList();
     }
 
     @Override

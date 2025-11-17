@@ -43,9 +43,10 @@ public class Company {
     private LocalDateTime accountVerifiedOn;
     @Enumerated(EnumType.STRING)
     private CompanySize companySize;
-    @ElementCollection(targetClass = CompanySpecialtyType.class, fetch = FetchType.EAGER)
+    @ElementCollection(targetClass = CompanyActivityType.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "company_activities",
             joinColumns = @JoinColumn(name = "company_id"))
+    @Enumerated(EnumType.STRING)
     private Set<CompanyActivityType> companyActivityType = EnumSet
             .noneOf(CompanyActivityType.class);
     private LocalDate yearEstablished;

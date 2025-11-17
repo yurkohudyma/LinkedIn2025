@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum CompanySpecialtyType {
+public enum CompanySpecialtyType implements LabeledEnum{
     ARTIFICIAL_INTELLIGENCE_DEVELOPMENT("Artificial Intelligence development"),
     BUSINESS_INTELLIGENCE_SERVICES("Business Intelligence Services"),
     CLOUD_SERVICES("Cloud Services"),
