@@ -1,6 +1,5 @@
 package ua.hudyma.mapper;
 
-import jakarta.persistence.Column;
 import org.springframework.stereotype.Component;
 import ua.hudyma.domain.job.Company;
 import ua.hudyma.dto.CompanyReqDto;
@@ -17,6 +16,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class CompanyMapper extends BaseMapper<CompanyRespDto, Company> {
+
     public Company mapReqDtoToEntity(CompanyReqDto dto) {
         var company = new Company();
         company.setCompanyName(dto.companyName());
@@ -55,31 +55,24 @@ public class CompanyMapper extends BaseMapper<CompanyRespDto, Company> {
                 company.getCompanyDescription(),
                 company.getWebsite(),
                 company.getPhone(),
-                company.getAccountVerifiedOn(),
+                company.getAccountVerifiedOn().toString(),
                 company.getCompanySize().getLabel(),
                 getEnumValueList(company
                         .getCompanyActivityType()),
                 company.getYearEstablished().getYear(),
-                getVacanciesCount(),
-                getCommentsCount(),
-                getEmotionsCount(),
-                getTrackingUsersCount()
+                company.getVacancyList().size(),
+                company.getCommentList().size(),
+                company.getEmotionList().size(),
+                getTrackingUsersCount(),
+                getWorkingUserCount()
         );
     }
 
+    private int getWorkingUserCount() {
+        return 0;
+    }
+
     private int getTrackingUsersCount() {
-        return 0;
-    }
-
-    private int getEmotionsCount() {
-        return 0;
-    }
-
-    private int getCommentsCount() {
-        return 0;
-    }
-
-    private int getVacanciesCount() {
         return 0;
     }
 

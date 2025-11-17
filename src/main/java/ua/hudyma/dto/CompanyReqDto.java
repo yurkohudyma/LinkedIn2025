@@ -14,7 +14,7 @@ public record CompanyReqDto(
         String companyDescription,
         String website,
         String phone,
-        LocalDateTime accountVerifiedOn,
+        LocalDate accountVerifiedOn,
         CompanySize companySize,
         Set<CompanyActivityType> companyActivityTypes,
         LocalDate yearEstablished) {

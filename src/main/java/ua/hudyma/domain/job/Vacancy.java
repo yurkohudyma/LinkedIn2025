@@ -24,8 +24,11 @@ public class Vacancy {
     @Column(columnDefinition = "text")
     private String niceToHave;
     @Column(columnDefinition = "text")
+    private String responsibilities;
+    @Column(columnDefinition = "text")
     private String offer;
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
+    private String recruiter;
 }

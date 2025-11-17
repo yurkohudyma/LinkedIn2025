@@ -10,13 +10,14 @@ public record CompanyRespDto(
         String companyDescription,
         String website,
         String phone,
-        LocalDateTime accountVerifiedOn,
+        String accountVerifiedOn,
         String companySize,
         List<String> companyActivityList,
         int yearEstablished,
         int vacanciesPublished,
         int commentsPublished,
         int emotionsExpressed,
-        int trackingUsers
+        int trackingUsers,
+        int workingUsers
 ) {
 }

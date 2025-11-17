@@ -40,7 +40,7 @@ public class Company {
     private String companyDescription;
     private String website;
     private String phone;
-    private LocalDateTime accountVerifiedOn;
+    private LocalDate accountVerifiedOn;
     @Enumerated(EnumType.STRING)
     private CompanySize companySize;
     @ElementCollection(targetClass = CompanyActivityType.class, fetch = FetchType.EAGER)
@@ -71,5 +71,7 @@ public class Company {
     private List<Vacancy> vacancyList = new ArrayList<>();
 
     //todo add connections
+    //todo vacancies
+    //todo company Resp stats
 
 }
