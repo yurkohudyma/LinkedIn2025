@@ -66,4 +66,10 @@ public class UserController {
     public ResponseEntity<String> disconnectWithUser (@RequestBody UserConnectionReqDto dto){
         return ResponseEntity.ok(userService.cancelConnection(dto));
     }
+
+    @GetMapping("/track")
+    public ResponseEntity<String> trackUser (@RequestParam String trackingUserCode,
+                                             @RequestParam String trackableUserCode){
+        return ResponseEntity.ok(userService.trackUser(trackingUserCode, trackableUserCode));
+    }
 }

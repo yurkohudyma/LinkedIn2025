@@ -101,13 +101,23 @@ public class User {
             cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private List<Emotion> emotionList = new ArrayList<>();
-
     @ManyToMany
     @ToString.Exclude
     @JoinTable(name = "users_tracking_companies",
             joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns =
                           @JoinColumn(name = "company_id"))
     private List<Company> trackableCompanyList = new ArrayList<>();
+
+    @ManyToMany
+    @ToString.Exclude
+    @JoinTable(name = "users_tracking_users",
+            joinColumns = @JoinColumn(name = "tracking_user_id"), inverseJoinColumns =
+    @JoinColumn(name = "trackable_user_id"))
+    private List<User> trackableUserList = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "trackableUserList")
+    @ToString.Exclude
+    private List<User> trackingUsersList = new ArrayList<>();
 
 
 }

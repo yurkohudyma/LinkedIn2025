@@ -74,9 +74,4 @@ public class Company {
     @ToString.Exclude
     private List<User> trackingUsersList = new ArrayList<>();
 
-
-    //todo add connections
-
-    //todo company Resp stats
-
 }

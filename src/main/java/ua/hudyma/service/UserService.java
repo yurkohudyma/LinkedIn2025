@@ -277,4 +277,20 @@ public class UserService {
                         () -> new EntityNotFoundException
                                 (" User " + userCode + " does NOT exist"));
     }
+
+    @Transactional
+    public String trackUser(String trackingUserCode, String trackableUserCode) {
+        if (trackingUserCode.equals(trackableUserCode)){
+            throw new IllegalArgumentException("Codes match: cannot track yourself");
+        }
+        var trackingUser = getUser(trackingUserCode);
+        var trackableUser = getUser(trackableUserCode);
+        trackingUser.getTrackableUserList().add(trackableUser);
+        trackableUser.getTrackingUsersList().add(trackingUser);
+        var msg = String.format("%s now tracks %s",
+                trackingUser.getFullName(),
+                trackableUser.getFullName());
+        log.info(msg);
+        return msg;
+    }
 }

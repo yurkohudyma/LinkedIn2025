@@ -7,5 +7,8 @@
 <li>Posts and comments</li>
 <li>Emotions for Posts and comments (likes etc)</li>
 <li>User-specific vacancy matching</li>
+<li>Users tracking Companies or Users</li>
+<li>Users tracking Companies</li>
+
 </ul>
 <img width="971" height="1267" alt="diagram" src="https://github.com/user-attachments/assets/59d19357-0a6a-44ae-aaba-92f96aa3f927" />
