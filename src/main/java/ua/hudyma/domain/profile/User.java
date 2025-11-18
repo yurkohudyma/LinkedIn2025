@@ -11,6 +11,8 @@ import ua.hudyma.domain.content.Emotion;
 import ua.hudyma.domain.content.Message;
 import ua.hudyma.domain.content.Post;
 import ua.hudyma.domain.job.Company;
+import ua.hudyma.domain.learning.Certificate;
+import ua.hudyma.domain.learning.Review;
 import ua.hudyma.util.IdGenerator;
 
 import java.time.LocalDateTime;
@@ -100,24 +102,25 @@ public class User {
     @OneToMany(mappedBy = "user",
             cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
-    private List<Emotion> emotionList = new ArrayList<>();
-    @ManyToMany
+    private List<Emotion> emotionList = new ArrayList<>();    @ManyToMany
     @ToString.Exclude
     @JoinTable(name = "users_tracking_companies",
             joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns =
                           @JoinColumn(name = "company_id"))
     private List<Company> trackableCompanyList = new ArrayList<>();
-
     @ManyToMany
     @ToString.Exclude
     @JoinTable(name = "users_tracking_users",
             joinColumns = @JoinColumn(name = "tracking_user_id"), inverseJoinColumns =
     @JoinColumn(name = "trackable_user_id"))
     private List<User> trackableUserList = new ArrayList<>();
-
     @ManyToMany(mappedBy = "trackableUserList")
     @ToString.Exclude
     private List<User> trackingUsersList = new ArrayList<>();
+    @OneToMany(mappedBy = "reviewAuthor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviewList = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Certificate> certificateList = new ArrayList<>();
 
 
 }
