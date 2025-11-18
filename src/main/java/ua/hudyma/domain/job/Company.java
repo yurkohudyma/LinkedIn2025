@@ -73,5 +73,6 @@ public class Company {
     @ManyToMany(mappedBy = "trackableCompanyList")
     @ToString.Exclude
     private List<User> trackingUsersList = new ArrayList<>();
+    private String headQuarters;
 
 }

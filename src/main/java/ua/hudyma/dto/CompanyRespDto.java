@@ -18,6 +18,7 @@ public record CompanyRespDto(
         int commentsPublished,
         int emotionsExpressed,
         int trackingUsers,
-        int workingUsers
+        int workingUsers,
+        String headQuarters
 ) {
 }

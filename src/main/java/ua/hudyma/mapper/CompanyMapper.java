@@ -36,6 +36,7 @@ public class CompanyMapper extends BaseMapper<CompanyRespDto, Company> {
                         CompanyActivityType.class));
         company.setYearEstablished(dto.yearEstablished());
         company.setWebsite(dto.website());
+        company.setHeadQuarters(dto.headQuarters());
         return company;
     }
 
@@ -68,12 +69,14 @@ public class CompanyMapper extends BaseMapper<CompanyRespDto, Company> {
                 company.getCommentList().size(),
                 company.getEmotionList().size(),
                 company.getTrackingUsersList().size(),
-                getWorkingUserCount(company.getCompanyName())
+                getWorkingUserCount(company.getCompanyName()),
+                company.getHeadQuarters()
         );
     }
 
     private int getWorkingUserCount(String companyName) {
-        return companyRepository.findUsersNumberHavingJobConnectionWithCompany(companyName);
+        return companyRepository
+                .findUsersNumberHavingJobConnectionWithCompany(companyName);
     }
 
     private <E extends LabeledEnum> List<String> getEnumValueList(

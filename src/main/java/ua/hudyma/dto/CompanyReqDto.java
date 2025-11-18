@@ -17,5 +17,6 @@ public record CompanyReqDto(
         LocalDate accountVerifiedOn,
         CompanySize companySize,
         Set<CompanyActivityType> companyActivityTypes,
-        LocalDate yearEstablished) {
+        LocalDate yearEstablished,
+        String headQuarters) {
 }

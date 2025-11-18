@@ -31,6 +31,4 @@ public class Vacancy {
     @JoinColumn(name = "company_id")
     private Company company;
     private String recruiter;
-
-    //todo implem vacancy matching
 }

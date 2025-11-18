@@ -1,12 +1,21 @@
 package ua.hudyma.enums;
 
-public enum EmploymentType {
-    FULL_TIME,
-    PART_TIME,
-    SELF_EMPLOYED,
-    FREELANCE,
-    CONTRACT,
-    STAGING,
-    STUDENT,
-    TEMPORARY
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+public enum EmploymentType implements LabeledEnum{
+    FULL_TIME ("Full-time"),
+    PART_TIME ("Part-time"),
+    SELF_EMPLOYED("Self-Employed"),
+    FREELANCE ("Freelance"),
+    CONTRACT ("Contract"),
+    TRAINEE ("Trainee"),
+    TEMPORARY ("Temporary");
+
+    private final String label;
+
+    @Override
+    public String getLabel() {
+        return label;
+    }
 }
