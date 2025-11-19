@@ -13,9 +13,10 @@ public record CourseRespDto(
         Set<AccessibilityType> accessibilityTypeSet,
         String instructor,
         ComplexityLevel complexityLevel,
-        List<UserSkillRespDto> skillDtoList
-
-        // todo add all lists
-
+        List<UserSkillRespDto> skillDtoList,
+        List<QuizRespDto> quizDtoList,
+        List<TopicRespDto> topicDtoList,
+        List<CertificateRespDto> certificateDtoList,
+        List<ReviewRespDto> reviewDtoList
 ) {
 }

@@ -3,7 +3,6 @@ package ua.hudyma.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ua.hudyma.domain.profile.Skill;
 import ua.hudyma.dto.CourseReqDto;
 import ua.hudyma.dto.CourseRespDto;
 import ua.hudyma.dto.UserSkillReqDto;
@@ -23,7 +22,7 @@ public class CourseController {
     }
     @GetMapping
     public ResponseEntity<CourseRespDto> addCourse (@RequestParam String courseCode){
-        return ResponseEntity.ok(courseService.fetchCourse(courseCode));
+        return ResponseEntity.ok(courseService.fetchCourseDto(courseCode));
     }
     @PatchMapping("/skills")
     public ResponseEntity<String> editSkills (@RequestParam String courseCode,

@@ -6,12 +6,11 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.hudyma.domain.learning.Course;
-import ua.hudyma.domain.profile.Skill;
-import ua.hudyma.dto.CompanyRespDto;
 import ua.hudyma.dto.CourseReqDto;
 import ua.hudyma.dto.CourseRespDto;
 import ua.hudyma.dto.UserSkillReqDto;
 import ua.hudyma.mapper.CourseMapper;
+import ua.hudyma.repository.CourseRepository;
 
 import java.util.List;
 
@@ -34,7 +33,7 @@ public class CourseService {
     public String editSkills(String courseCode, List<UserSkillReqDto> dtoList) {
         var course = getCourse(courseCode);
         var skillList = course.getSkillList();
-        var dtoReqSkillList = courseMapper.mapEntityListToDto(dtoList);
+        var dtoReqSkillList = courseMapper.mapEntityListToSkillDtoList(dtoList);
         if (skillList == null || skillList.isEmpty()){
             course.setSkillList(dtoReqSkillList);
         }
@@ -48,11 +47,11 @@ public class CourseService {
     }
 
     @Transactional
-    public CourseRespDto fetchCourse(String courseCode) {
+    public CourseRespDto fetchCourseDto(String courseCode) {
         return courseMapper.toDto(getCourse(courseCode));
     }
 
-    private Course getCourse(String courseCode) {
+    public Course getCourse(String courseCode) {
         return courseRepository.findByCourseCode(courseCode)
                 .orElseThrow( () -> new EntityNotFoundException("Course " + courseCode + " NOT FOUND"));
     }

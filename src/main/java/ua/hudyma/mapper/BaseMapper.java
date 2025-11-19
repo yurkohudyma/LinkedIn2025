@@ -11,10 +11,12 @@ public abstract class BaseMapper<RESP_DTO, ENTITY, REQ_DTO> {
     public List<ENTITY> toEntityList(List<REQ_DTO> dtos) {
         return mapList(dtos, this::toEntity);
     }
-    public abstract RESP_DTO toDto(ENTITY e);
-    public abstract ENTITY toEntity(REQ_DTO q);
+    public abstract RESP_DTO toDto(ENTITY entity);
+    public abstract ENTITY toEntity(REQ_DTO dto);
 
-    protected <TYPE, RESULT> List<RESULT> mapList(List<TYPE> source, Function<TYPE, RESULT> mapper) {
+    protected <TYPE, RESULT> List<RESULT> mapList(
+            List<TYPE> source,
+            Function<TYPE, RESULT> mapper) {
         if (source == null || source.isEmpty()) {
             return List.of();
         }
