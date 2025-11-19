@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ua.hudyma.dto.MessageRespDto;
 import ua.hudyma.enums.MessageReqDto;
 import ua.hudyma.enums.MessageStatus;
 import ua.hudyma.mapper.MessageMapper;
@@ -33,7 +34,7 @@ public class MessageService {
 
     @Transactional
     public String createMessage(MessageReqDto dto) {
-        var message = messageMapper.mapToEntity(dto);
+        var message = messageMapper.toEntity(dto);
         message.setStatus(MessageStatus.SENT);
         messageRepository.save(message);
         message.getFromUser().getOutcomingMessageList().add(message);
@@ -44,12 +45,12 @@ public class MessageService {
         return msg;
     }
 
-    public List<MessageReqDto> getAllIncomingMessages(String userCode) {
+    public List<MessageRespDto> getAllIncomingMessages(String userCode) {
         return messageMapper.toDtoList(
                 messageRepository.findAllByToUser_UserCode(userCode));
     }
 
-    public List<MessageReqDto> getAllOutcomingMessages(String userCode) {
+    public List<MessageRespDto> getAllOutcomingMessages(String userCode) {
         return messageMapper.toDtoList(
                 messageRepository.findAllByFromUser_UserCode(userCode));
     }

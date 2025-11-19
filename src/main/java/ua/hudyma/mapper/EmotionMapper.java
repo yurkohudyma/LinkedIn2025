@@ -3,14 +3,15 @@ package ua.hudyma.mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ua.hudyma.domain.content.Emotion;
+import ua.hudyma.dto.EmotionReqDto;
 import ua.hudyma.dto.EmotionRespDto;
 import ua.hudyma.service.EmotionService;
 
 @Component
 @RequiredArgsConstructor
-public class EmotionMapper extends BaseMapper<EmotionRespDto, Emotion> {
+public class EmotionMapper extends BaseMapper<EmotionRespDto, Emotion, EmotionReqDto> {
     @Override
-    protected EmotionRespDto toDto(Emotion emotion) {
+    public EmotionRespDto toDto(Emotion emotion) {
         var comment = emotion.getComment();
         var post = emotion.getPost();
         var postHeading = post == null ? null : compileHeading(post.getText());
@@ -30,7 +31,7 @@ public class EmotionMapper extends BaseMapper<EmotionRespDto, Emotion> {
     }
 
     @Override
-    protected Emotion toEntity(EmotionRespDto dto) {
+    public Emotion toEntity(EmotionReqDto requestDto) {
         return null;
     }
 }

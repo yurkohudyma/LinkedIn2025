@@ -209,12 +209,12 @@ public class UserService {
     @Transactional(readOnly = true)
     public UserRespDto fetchUserDto(String userCode) {
         var user = getUser(userCode);
-        return userMapper.mapToDto(user);
+        return userMapper.toDto(user);
     }
 
     public void createUser(UserReqDto dto) {
         checkObligatoryFields(dto);
-        var user = userMapper.mapToEntity(dto);
+        var user = userMapper.toEntity(dto);
         userRepository.save(user);
         log.info("::: User {} CREATED", user.getFullName());
     }

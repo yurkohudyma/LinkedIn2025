@@ -15,7 +15,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class VacancyMapper extends BaseMapper<VacancyRespDto, Vacancy> {
+public class VacancyMapper extends BaseMapper<VacancyRespDto, Vacancy, VacancyReqDto> {
     private final CompanyRepository companyRepository;
 
     public List<VacancyMatcherDto> mapEntityListToVacancyMatcherDtoList(
@@ -29,26 +29,6 @@ public class VacancyMapper extends BaseMapper<VacancyRespDto, Vacancy> {
                         vacancy.getVacancyCode())
         ).toList();
     }
-
-    public Vacancy mapReqDtoToEntity(VacancyReqDto dto) {
-        var companyCode = dto.companyCode();
-        if (companyCode == null || companyCode.isEmpty()) {
-            throw new DtoObligatoryFieldsAreMissingException("CompanyCode is Null or Empty, fail-safing");
-        }
-        var company = getCompany(companyCode);
-        var vacancy = new Vacancy();
-        vacancy.setEmploymentType(dto.employmentType());
-        vacancy.setPosition(dto.position());
-        vacancy.setDescription(dto.description());
-        vacancy.setRequirements(dto.requirements());
-        vacancy.setNiceToHave(dto.niceToHave());
-        vacancy.setResponsibilities(dto.responsibilities());
-        vacancy.setOffer(dto.offer());
-        vacancy.setRecruiter(dto.recruiter());
-        vacancy.setCompany(company);
-        return vacancy;
-    }
-
     private Company getCompany(String companyCode) {
         return companyRepository.findByCompanyCode(companyCode)
                 .orElseThrow(() ->
@@ -72,7 +52,22 @@ public class VacancyMapper extends BaseMapper<VacancyRespDto, Vacancy> {
     }
 
     @Override
-    public Vacancy toEntity(VacancyRespDto dto) {
-        return null;
+    public Vacancy toEntity(VacancyReqDto dto) {
+        var companyCode = dto.companyCode();
+        if (companyCode == null || companyCode.isEmpty()) {
+            throw new DtoObligatoryFieldsAreMissingException("CompanyCode is Null or Empty, fail-safing");
+        }
+        var company = getCompany(companyCode);
+        var vacancy = new Vacancy();
+        vacancy.setEmploymentType(dto.employmentType());
+        vacancy.setPosition(dto.position());
+        vacancy.setDescription(dto.description());
+        vacancy.setRequirements(dto.requirements());
+        vacancy.setNiceToHave(dto.niceToHave());
+        vacancy.setResponsibilities(dto.responsibilities());
+        vacancy.setOffer(dto.offer());
+        vacancy.setRecruiter(dto.recruiter());
+        vacancy.setCompany(company);
+        return vacancy;
     }
 }

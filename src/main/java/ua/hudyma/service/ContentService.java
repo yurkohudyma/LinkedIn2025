@@ -97,7 +97,7 @@ public class ContentService {
         var msg = String.format("Comment %s has BEEN UPDATED", commentCode);
         log.info(msg);
         em.flush();
-        return commentMapper.mapToDto(comment);
+        return commentMapper.toDto(comment);
     }
 
     @Transactional
@@ -109,7 +109,7 @@ public class ContentService {
         var msg = String.format("Post %s has BEEN UPDATED", postCode);
         log.info(msg);
         em.flush();
-        return postMapper.mapToDto(post);
+        return postMapper.toDto(post);
     }
 
     public List<CommentRespDto> getAllPostComments(String postCode) {

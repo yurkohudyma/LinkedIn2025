@@ -18,27 +18,8 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class CompanyMapper extends BaseMapper<CompanyRespDto, Company> {
+public class CompanyMapper extends BaseMapper<CompanyRespDto, Company, CompanyReqDto> {
     private final CompanyRepository companyRepository;
-
-    public Company mapReqDtoToEntity(CompanyReqDto dto) {
-        var company = new Company();
-        company.setCompanyName(dto.companyName());
-        company.setCompanySpecialtyTypes(
-                toEnumSet(dto.companySpecialtyTypes(),
-                        CompanySpecialtyType.class));
-        company.setCompanyDescription(dto.companyDescription());
-        company.setPhone(dto.phone());
-        company.setAccountVerifiedOn(dto.accountVerifiedOn());
-        company.setCompanySize(dto.companySize());
-        company.setCompanyActivityType(
-                toEnumSet(dto.companyActivityTypes(),
-                        CompanyActivityType.class));
-        company.setYearEstablished(dto.yearEstablished());
-        company.setWebsite(dto.website());
-        company.setHeadQuarters(dto.headQuarters());
-        return company;
-    }
 
     private <E extends Enum<E>> Set<E> toEnumSet(Set<E> dtoSet,
                                                  Class<E> enumClass) {
@@ -51,7 +32,7 @@ public class CompanyMapper extends BaseMapper<CompanyRespDto, Company> {
     }
 
     @Override
-    protected CompanyRespDto toDto(Company company) {
+    public CompanyRespDto toDto(Company company) {
         return new CompanyRespDto(
                 company.getCompanyCode(),
                 company.getCompanyName(),
@@ -88,7 +69,22 @@ public class CompanyMapper extends BaseMapper<CompanyRespDto, Company> {
     }
 
     @Override
-    protected Company toEntity(CompanyRespDto dto) {
-        return null;
+    public Company toEntity(CompanyReqDto dto) {
+        var company = new Company();
+        company.setCompanyName(dto.companyName());
+        company.setCompanySpecialtyTypes(
+                toEnumSet(dto.companySpecialtyTypes(),
+                        CompanySpecialtyType.class));
+        company.setCompanyDescription(dto.companyDescription());
+        company.setPhone(dto.phone());
+        company.setAccountVerifiedOn(dto.accountVerifiedOn());
+        company.setCompanySize(dto.companySize());
+        company.setCompanyActivityType(
+                toEnumSet(dto.companyActivityTypes(),
+                        CompanyActivityType.class));
+        company.setYearEstablished(dto.yearEstablished());
+        company.setWebsite(dto.website());
+        company.setHeadQuarters(dto.headQuarters());
+        return company;
     }
 }

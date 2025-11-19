@@ -102,7 +102,8 @@ public class User {
     @OneToMany(mappedBy = "user",
             cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
-    private List<Emotion> emotionList = new ArrayList<>();    @ManyToMany
+    private List<Emotion> emotionList = new ArrayList<>();
+    @ManyToMany
     @ToString.Exclude
     @JoinTable(name = "users_tracking_companies",
             joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns =

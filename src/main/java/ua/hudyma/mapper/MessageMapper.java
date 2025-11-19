@@ -5,17 +5,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ua.hudyma.domain.content.Message;
 import ua.hudyma.domain.profile.User;
+import ua.hudyma.dto.MessageRespDto;
 import ua.hudyma.enums.MessageReqDto;
 import ua.hudyma.repository.UserRepository;
 
 @Component
 @RequiredArgsConstructor
-public class MessageMapper extends BaseMapper<MessageReqDto, Message> {
+public class MessageMapper extends BaseMapper<MessageRespDto, Message, MessageReqDto> {
     private final UserRepository userRepository;
 
     @Override
-    protected MessageReqDto toDto(Message message) {
-        return new MessageReqDto(
+    public MessageRespDto toDto(Message message) {
+        return new MessageRespDto(
                             message.getMessageCode(),
                 message.getFromUser().getFullName(),
                 message.getToUser().getFullName(),
@@ -27,7 +28,7 @@ public class MessageMapper extends BaseMapper<MessageReqDto, Message> {
     }
 
     @Override
-    protected Message toEntity(MessageReqDto dto) {
+    public Message toEntity(MessageReqDto dto) {
         var message = new Message();
         message.setFromUser(getUser(dto.fromUserCode()));
         message.setToUser(getUser(dto.toUserCode()));

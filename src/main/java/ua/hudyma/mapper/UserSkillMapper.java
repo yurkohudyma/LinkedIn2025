@@ -3,12 +3,13 @@ package ua.hudyma.mapper;
 import org.springframework.stereotype.Component;
 import ua.hudyma.domain.profile.Skill;
 import ua.hudyma.dto.UserSkillReqDto;
+import ua.hudyma.dto.UserSkillRespDto;
 
 @Component
-public class UserSkillMapper extends BaseMapper <UserSkillReqDto, Skill>{
+public class UserSkillMapper extends BaseMapper <UserSkillRespDto, Skill, UserSkillReqDto>{
     @Override
-    protected UserSkillReqDto toDto(Skill skill) {
-        return new UserSkillReqDto(
+    public UserSkillRespDto toDto(Skill skill) {
+        return new UserSkillRespDto(
                 skill.getSkillName(),
                 skill.getSkillCategory(),
                 skill.getProficiencyLevel()
@@ -16,7 +17,7 @@ public class UserSkillMapper extends BaseMapper <UserSkillReqDto, Skill>{
     }
 
     @Override
-    protected Skill toEntity(UserSkillReqDto dto) {
+    public Skill toEntity(UserSkillReqDto dto) {
         var skill = new Skill();
         skill.setSkillCategory(dto.skillCategory());
         skill.setSkillName(dto.skillName());

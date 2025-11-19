@@ -3,12 +3,13 @@ package ua.hudyma.mapper;
 import org.springframework.stereotype.Component;
 import ua.hudyma.domain.profile.Position;
 import ua.hudyma.dto.UserPositionReqDto;
+import ua.hudyma.dto.UserPositionRespDto;
 
 @Component
-public class UserPositionMapper extends BaseMapper <UserPositionReqDto, Position> {
+public class UserPositionMapper extends BaseMapper <UserPositionRespDto, Position, UserPositionReqDto> {
     @Override
-    protected UserPositionReqDto toDto(Position position) {
-        return new UserPositionReqDto(
+    public UserPositionRespDto toDto(Position position) {
+        return new UserPositionRespDto(
                 position.getPositionName(),
                 position.getEmploymentType(),
                 position.getOrganisationName()
@@ -16,7 +17,7 @@ public class UserPositionMapper extends BaseMapper <UserPositionReqDto, Position
     }
 
     @Override
-    protected Position toEntity(UserPositionReqDto position) {
+     public Position toEntity(UserPositionReqDto position) {
         var pos = new Position();
         pos.setPositionName(position.positionName());
         pos.setEmploymentType(position.employmentType());

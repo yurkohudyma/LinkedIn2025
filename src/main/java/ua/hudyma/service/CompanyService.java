@@ -39,7 +39,7 @@ public class CompanyService {
     }
 
     public String createCompany(CompanyReqDto dto) {
-        var company = companyMapper.mapReqDtoToEntity (dto);
+        var company = companyMapper.toEntity(dto);
         companyRepository.save(company);
         var msg = String.format("::: Company %s has been created", company.getCompanyName());
         log.info(msg);
@@ -47,7 +47,7 @@ public class CompanyService {
     }
 
     public String createVacancy(VacancyReqDto dto) {
-        var vacancy = vacancyMapper.mapReqDtoToEntity(dto);
+        var vacancy = vacancyMapper.toEntity(dto);
         vacancyRepository.save(vacancy);
         var msg = String.format("::: Vacancy %s has BEEN SAVED", vacancy.getPosition());
         log.info(msg);
@@ -57,7 +57,7 @@ public class CompanyService {
     @Transactional
     public CompanyRespDto fetchCompany(String companyCode) {
         var company = getCompany(companyCode);
-        return companyMapper.mapToDto(company);
+        return companyMapper.toDto(company);
     }
 
     private Company getCompany(String companyCode) {

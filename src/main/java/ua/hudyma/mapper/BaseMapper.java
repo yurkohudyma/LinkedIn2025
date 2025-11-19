@@ -3,27 +3,18 @@ package ua.hudyma.mapper;
 import java.util.List;
 import java.util.function.Function;
 
-public abstract class BaseMapper<D, E> {
+public abstract class BaseMapper<RESP_DTO, ENTITY, REQ_DTO> {
 
-    public List<D> toDtoList(List<E> entities) {
+    public List<RESP_DTO> toDtoList(List<ENTITY> entities) {
         return mapList(entities, this::toDto);
     }
-
-    public List<E> toEntityList(List<D> dtos) {
+    public List<ENTITY> toEntityList(List<REQ_DTO> dtos) {
         return mapList(dtos, this::toEntity);
     }
+    public abstract RESP_DTO toDto(ENTITY e);
+    public abstract ENTITY toEntity(REQ_DTO q);
 
-    public D mapToDto (E e){
-        return toDto(e);
-    }
-    public E mapToEntity (D d){
-        return toEntity(d);
-    }
-
-    protected abstract D toDto(E entity);
-    protected abstract E toEntity(D dto);
-
-    protected <T, R> List<R> mapList(List<T> source, Function<T, R> mapper) {
+    protected <TYPE, RESULT> List<RESULT> mapList(List<TYPE> source, Function<TYPE, RESULT> mapper) {
         if (source == null || source.isEmpty()) {
             return List.of();
         }

@@ -2,13 +2,14 @@ package ua.hudyma.mapper;
 
 import org.springframework.stereotype.Component;
 import ua.hudyma.domain.content.Post;
+import ua.hudyma.dto.PostReqDto;
 import ua.hudyma.dto.PostRespDto;
 import ua.hudyma.enums.PostStatus;
 
 @Component
-public class PostMapper extends BaseMapper<PostRespDto, Post> {
+public class PostMapper extends BaseMapper<PostRespDto, Post, PostReqDto> {
     @Override
-    protected PostRespDto toDto(Post post) {
+    public PostRespDto toDto(Post post) {
         return new PostRespDto(
                 post.getPostCode(),
                 post.getUser().getFullName(),
@@ -26,7 +27,7 @@ public class PostMapper extends BaseMapper<PostRespDto, Post> {
     }
 
     @Override
-    protected Post toEntity(PostRespDto dto) {
+    public Post toEntity(PostReqDto requestDto) {
         return null;
     }
 }

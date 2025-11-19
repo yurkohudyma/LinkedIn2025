@@ -3,13 +3,14 @@ package ua.hudyma.mapper;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Component;
 import ua.hudyma.domain.content.Comment;
+import ua.hudyma.dto.CommentReqDto;
 import ua.hudyma.dto.CommentRespDto;
 import ua.hudyma.enums.CommentStatus;
 
 @Component
-public class CommentMapper extends BaseMapper <CommentRespDto, Comment> {
+public class CommentMapper extends BaseMapper <CommentRespDto, Comment, CommentReqDto> {
     @Override
-    protected CommentRespDto toDto(Comment comment) {
+    public CommentRespDto toDto(Comment comment) {
         return new CommentRespDto(
                 comment.getCommentCode(),
                 comment.getUser().getFullName(),
@@ -27,7 +28,7 @@ public class CommentMapper extends BaseMapper <CommentRespDto, Comment> {
     }
 
     @Override
-    protected Comment toEntity(CommentRespDto dto) {
+    public Comment toEntity(CommentReqDto requestDto) {
         return null;
     }
 }

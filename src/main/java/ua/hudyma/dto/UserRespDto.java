@@ -9,10 +9,10 @@ public record UserRespDto(
         String profileUrl,
         String address,
         String birthDate,
-        List<UserPhoneReqDto> phoneList,
-        List<UserEducationReqDto> educationList,
-        List<UserMessengerReqDto> messengerList,
-        List<UserWebsiteReqDto> websiteList,
-        List<UserPositionReqDto> positionList,
-        List<UserSkillReqDto> userSkillReqDtos) {
+        List<UserPhoneRespDto> phoneList,
+        List<UserEducationRespDto> educationList,
+        List<UserMessengerRespDto> messengerList,
+        List<UserWebsiteRespDto> websiteList,
+        List<UserPositionRespDto> positionList,
+        List<UserSkillRespDto> userSkillReqDtos) {
 }

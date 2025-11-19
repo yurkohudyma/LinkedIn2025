@@ -3,19 +3,20 @@ package ua.hudyma.mapper;
 import org.springframework.stereotype.Component;
 import ua.hudyma.domain.profile.Phone;
 import ua.hudyma.dto.UserPhoneReqDto;
+import ua.hudyma.dto.UserPhoneRespDto;
 
 @Component
-public class UserPhoneMapper extends BaseMapper<UserPhoneReqDto, Phone> {
+public class UserPhoneMapper extends BaseMapper<UserPhoneRespDto, Phone, UserPhoneReqDto> {
     @Override
-    protected UserPhoneReqDto toDto(Phone phone) {
-        return new UserPhoneReqDto(
+    public UserPhoneRespDto toDto(Phone phone) {
+        return new UserPhoneRespDto(
                 phone.getPhoneNumber(),
                 phone.getPhoneType()
         );
     }
 
     @Override
-    protected Phone toEntity(UserPhoneReqDto dto) {
+    public Phone toEntity(UserPhoneReqDto dto) {
         var phone = new Phone();
         phone.setPhoneNumber(dto.phoneNumber());
         phone.setPhoneType(dto.phoneType());
