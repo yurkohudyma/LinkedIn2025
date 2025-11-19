@@ -9,6 +9,7 @@
 <li>User-specific vacancy matching</li>
 <li>Users tracking Companies or Users</li>
 <li>Users connect Users</li>
-
+<li>Learning portal with courses, quizzes and user reviews</li>
 </ul>
-<img width="971" height="1267" alt="diagram" src="https://github.com/user-attachments/assets/59d19357-0a6a-44ae-aaba-92f96aa3f927" />
+<img width="1179" height="881" alt="image" src="https://github.com/user-attachments/assets/5b72f2e7-b55d-4943-906e-2aee8a334dfa" />
+
