@@ -31,7 +31,7 @@ public class CourseMapper extends BaseMapper<CourseRespDto, Course, CourseReqDto
                 course.getAccessibilityTypeSet(),
                 course.getInstructor(),
                 course.getComplexityLevel(),
-                mapSkillListToDto(course.getSkillList()),
+                mapSkillListToDtoList(course.getSkillList()),
                 mapQuizListToDtoList(course.getQuizList()),
                 mapTopicListToDtoList(course.getTopicList()),
                 mapCertListToDtoList(course.getCertificateList()),
@@ -39,27 +39,30 @@ public class CourseMapper extends BaseMapper<CourseRespDto, Course, CourseReqDto
         );
     }
 
-    private List<ReviewRespDto> mapReviewListToDtoList(List<Review> reviewList) {
+    public List<ReviewRespDto> mapReviewListToDtoList(List<Review> reviewList) {
         return reviewMapper.toDtoList(reviewList);
     }
 
-    private List<CertificateRespDto> mapCertListToDtoList(List<Certificate> certificateList) {
+    public List<CertificateRespDto> mapCertListToDtoList(List<Certificate> certificateList) {
         return certificateMapper.toDtoList(certificateList);
     }
 
-    private List<TopicRespDto> mapTopicListToDtoList(List<Topic> topicList) {
+    public List<TopicRespDto> mapTopicListToDtoList(List<Topic> topicList) {
         return topicMapper.toDtoList(topicList);
     }
 
-    private List<QuizRespDto> mapQuizListToDtoList(List<Quiz> quizList) {
+    public List<QuizRespDto> mapQuizListToDtoList(List<Quiz> quizList) {
         return quizMapper.toDtoList(quizList);
     }
+    public List<Quiz> mapDtoListToQuizList(List<QuizReqDto> dtoList){
+        return quizMapper.toEntityList(dtoList);
+    }
 
-    public List<UserSkillRespDto> mapSkillListToDto (List<Skill> skillList){
+    public List<UserSkillRespDto> mapSkillListToDtoList(List<Skill> skillList){
         return skillMapper.toDtoList(skillList);
     }
 
-    public List<Skill> mapEntityListToSkillDtoList(List<UserSkillReqDto> skillReqDtoList){
+    public List<Skill> mapDtoListToSkillList(List<UserSkillReqDto> skillReqDtoList){
         return skillMapper.toEntityList(skillReqDtoList);
     }
 

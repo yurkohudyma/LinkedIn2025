@@ -19,7 +19,8 @@ public class QuizMapper extends BaseMapper<QuizRespDto, Quiz, QuizReqDto> {
     public QuizRespDto toDto(Quiz quiz) {
         return new QuizRespDto(
                 quiz.getQuizCode(),
-                quiz.getCourse().getCourseName()
+                quiz.getCourse().getCourseName(),
+                quiz.getNumberOfQuestions()
         );
     }
 
@@ -32,6 +33,7 @@ public class QuizMapper extends BaseMapper<QuizRespDto, Quiz, QuizReqDto> {
         var course = getCourse(courseCode);
         var quiz = new Quiz();
         quiz.setCourse(course);
+        quiz.setNumberOfQuestions(dto.numberOfQuestions());
         return quiz;
     }
 

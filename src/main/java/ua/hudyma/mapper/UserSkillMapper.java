@@ -12,7 +12,7 @@ public class UserSkillMapper extends BaseMapper <UserSkillRespDto, Skill, UserSk
         return new UserSkillRespDto(
                 skill.getSkillName(),
                 skill.getSkillCategory(),
-                skill.getProficiencyLevel()
+                "NA"
         );
     }
 

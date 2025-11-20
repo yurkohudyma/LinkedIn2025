@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ua.hudyma.domain.learning.Course;
 import ua.hudyma.dto.CourseReqDto;
 import ua.hudyma.dto.CourseRespDto;
+import ua.hudyma.dto.QuizReqDto;
 import ua.hudyma.dto.UserSkillReqDto;
 import ua.hudyma.mapper.CourseMapper;
 import ua.hudyma.repository.CourseRepository;
@@ -30,16 +31,19 @@ public class CourseService {
     }
 
     @Transactional
+    public String editQuizzes(String courseCode, List<QuizReqDto> dtoList) {
+        var course = getCourse(courseCode);
+        course.getQuizList().addAll(courseMapper.mapDtoListToQuizList(dtoList));
+        var msg = String.format("Skill list for Course %s has been UPDATED",
+                course.getCourseName());
+        log.info(msg);
+        return msg;
+    }
+
+    @Transactional
     public String editSkills(String courseCode, List<UserSkillReqDto> dtoList) {
         var course = getCourse(courseCode);
-        var skillList = course.getSkillList();
-        var dtoReqSkillList = courseMapper.mapEntityListToSkillDtoList(dtoList);
-        if (skillList == null || skillList.isEmpty()){
-            course.setSkillList(dtoReqSkillList);
-        }
-        else {
-            skillList.addAll(dtoReqSkillList);
-        }
+        course.getSkillList().addAll(courseMapper.mapDtoListToSkillList(dtoList));
         var msg = String.format("Skill list for Course %s has been UPDATED",
                 course.getCourseName());
         log.info(msg);
