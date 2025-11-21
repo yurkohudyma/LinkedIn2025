@@ -21,7 +21,8 @@ public class ReviewMapper extends BaseMapper<ReviewRespDto, Review, ReviewReqDto
         return new ReviewRespDto(
                 review.getRating(),
                 review.getReviewAuthor().getFullName(),
-                review.getCourse().getCourseCode()
+                review.getCourse().getCourseCode(),
+                review.getReviewComment()
         );
     }
 
@@ -42,7 +43,12 @@ public class ReviewMapper extends BaseMapper<ReviewRespDto, Review, ReviewReqDto
         review.setReviewAuthor(user);
         var course = getCourse(courseCode);
         review.setCourse(course);
+        if (dto.rating() > 5 || dto.rating() <= 0){
+            throw new DtoObligatoryFieldsAreMissingException
+                    ("Rating SHOULD BE in range of 1-5");
+        }
         review.setRating(dto.rating());
+        review.setReviewComment(dto.reviewComment());
         return review;
     }
 

@@ -8,6 +8,7 @@ import ua.hudyma.dto.*;
 import ua.hudyma.enums.AccessibilityType;
 import ua.hudyma.exception.DtoObligatoryFieldsAreMissingException;
 
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
@@ -21,6 +22,10 @@ public class CourseMapper extends BaseMapper<CourseRespDto, Course, CourseReqDto
     private final CertificateMapper certificateMapper;
     private final TopicMapper topicMapper;
     private final QuizMapper quizMapper;
+
+    public List<Certificate> mapDtoListToCertList(List<CertificateReqDto> dtoList) {
+        return certificateMapper.toEntityList(dtoList);
+    }
 
     @Override
     public CourseRespDto toDto(Course course) {
@@ -37,6 +42,13 @@ public class CourseMapper extends BaseMapper<CourseRespDto, Course, CourseReqDto
                 mapCertListToDtoList(course.getCertificateList()),
                 mapReviewListToDtoList(course.getReviewList())
         );
+    }
+
+    public List<Topic> mapDtoListToTopicList(List<TopicReqDto> dtoList) {
+        return topicMapper.toEntityList(dtoList);
+    }
+    public List<Review> mapDtoListToReviewList(List<ReviewReqDto> dtoList) {
+        return reviewMapper.toEntityList(dtoList);
     }
 
     public List<ReviewRespDto> mapReviewListToDtoList(List<Review> reviewList) {

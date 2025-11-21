@@ -18,4 +18,5 @@ public class Review {
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
+    private String reviewComment;
 }

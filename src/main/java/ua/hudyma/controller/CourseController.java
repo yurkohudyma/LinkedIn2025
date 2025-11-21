@@ -3,11 +3,7 @@ package ua.hudyma.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ua.hudyma.domain.learning.Quiz;
-import ua.hudyma.dto.CourseReqDto;
-import ua.hudyma.dto.CourseRespDto;
-import ua.hudyma.dto.QuizReqDto;
-import ua.hudyma.dto.UserSkillReqDto;
+import ua.hudyma.dto.*;
 import ua.hudyma.service.CourseService;
 
 import java.util.List;
@@ -35,5 +31,20 @@ public class CourseController {
     public ResponseEntity<String> editQuizzes (@RequestParam String courseCode,
                                              @RequestBody List<QuizReqDto> dtoList){
         return ResponseEntity.ok(courseService.editQuizzes(courseCode, dtoList));
+    }
+    @PatchMapping("/topics")
+    public ResponseEntity<String> editTopics (@RequestParam String courseCode,
+                                               @RequestBody List<TopicReqDto> dtoList){
+        return ResponseEntity.ok(courseService.editTopics(courseCode, dtoList));
+    }
+    @PatchMapping("/reviews")
+    public ResponseEntity<String> editReviews (@RequestParam String courseCode,
+                                              @RequestBody List<ReviewReqDto> dtoList){
+        return ResponseEntity.ok(courseService.editReviews(courseCode, dtoList));
+    }
+    @PatchMapping("/certs")
+    public ResponseEntity<String> editCerts (@RequestParam String courseCode,
+                                               @RequestBody List<CertificateReqDto> dtoList){
+        return ResponseEntity.ok(courseService.editCerts(courseCode, dtoList));
     }
 }

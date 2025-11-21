@@ -49,7 +49,9 @@ public class Course {
             orphanRemoval = true)
     private List<Certificate> certificateList = new ArrayList<>();
     private String instructor;
-    @OneToMany(mappedBy = "course")
+    @OneToMany(mappedBy = "course",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     private List<Review> reviewList = new ArrayList<>();
     @Enumerated(EnumType.STRING)
     private ComplexityLevel complexityLevel;
